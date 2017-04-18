@@ -1,8 +1,8 @@
 Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
-uses ubank, sysutils, crt; 
-// ubank : Unit yang memuat berbagai fungsi-fungsi bank
+uses uload, sysutils, crt;
+// uload : Unit yang memuat fungsi load data-data bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
 
@@ -15,7 +15,7 @@ begin
   writeln('Tanggal dan waktu sekarang adalah ',DateTimeToStr(Now));
   repeat
     write('XYZ > ');readln(cmd);
-    if (not(cmd = 'exit')) then 
+    if (not(cmd = 'exit')) then
     begin
       case cmd of // Ketika kode-kode yang bersangkutan sudah selesai, gantilah blok kode dibawah dengan yang relevan
         'load' : begin
