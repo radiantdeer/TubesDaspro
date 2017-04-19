@@ -2,7 +2,7 @@ unit banktype;
 
 interface
 const
-  nmax=500
+  nmax=500;
 type
   // SATU DATA Nasabah
    nasabah = record
@@ -38,7 +38,7 @@ type
 
 // List Data Rekening Online
     lrekonline = record
-      list : array of rekonline;
+      list : array[1..nmax] of rekonline;
       Neff : integer;
     end;
 
@@ -54,7 +54,7 @@ type
 
     // List Histori Transaksi
       ltrans = record
-        list : array of trans;
+        list : array[1..nmax] of trans;
         Neff : integer;
       end;
 
@@ -72,7 +72,7 @@ type
 
     // List Histori Transfer
       ltrf = record
-        list : array of trf;
+        list : array[1..nmax] of trf;
         Neff : integer;
       end;
 
@@ -89,7 +89,7 @@ type
 
       // List Histori Pembayaran
         lpembayaran = record
-          list : array of pembayaran;
+          list : array[1..nmax] of pembayaran;
           Neff : integer;
         end;
 
@@ -107,7 +107,7 @@ type
 
       // List Histori Pembelian
         lpembelian = record
-          list : array of pembelian;
+          list : array[1..nmax] of pembelian;
           Neff : integer;
         end;
 
@@ -121,7 +121,7 @@ type
 
 // List Kurs
   lkurs = record
-    list : array of kurs;
+    list : array[1..nmax] of kurs;
     Neff : integer;
   end;
 
@@ -134,7 +134,7 @@ type
 
 // List Barang
   lbarang = record
-    list : array of barang;
+    list : array[1..nmax] of barang;
     Neff : integer;
   end;
 
