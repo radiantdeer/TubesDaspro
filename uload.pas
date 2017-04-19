@@ -2,73 +2,20 @@ unit uload;
 
 interface
 
-  uses sysutils, banktype; // banktype mengandung deklarasi tipe-tipe yang akan dipakai
-
-// Variabel pendukung data internal
-  var
-    arrnasabah : lnasabah;
-    arrrekonline : lrekonline;
-    arrtransaksi : ltrans;
-    arrtransfer : ltrf;
-    arrbayar : lpembayaran;
-    arrbeli : lpembelian;
-    arrkurs : lkurs;
-    arrbarang : lbarang;
-
+  uses sysutils, banktype;
 // Daftar semua fungsi dan prosedur yang tersedia di unit ini
-procedure loadFile(fname : string);
-procedure loadallnasabah(var f : text);
-procedure loadallrekonline(var f : text);
-procedure loadalltransaksi(var f : text);
-procedure loadalltransfer(var f : text);
-procedure loadallbayar(var f : text);
-procedure loadallbeli(var f : text);
-procedure loadallkurs(var f : text);
-procedure loadallbarang(var f : text);
-procedure testTulis(); // Prosedur hanya untuk debugging saja
+  procedure loadallnasabah(var f : text; var arrnasabah : lnasabah);
+  procedure loadallrekonline(var f : text; var arrrekonline : lrekonline);
+  procedure loadalltransaksi(var f : text; var arrtransaksi : ltrans);
+  procedure loadalltransfer(var f : text; var arrtransfer : ltrf);
+  procedure loadallbayar(var f : text; var arrbayar : lpembayaran);
+  procedure loadallbeli(var f : text; var arrbeli : lpembelian);
+  procedure loadallkurs(var f : text; var arrkurs : lkurs);
+  procedure loadallbarang(var f : text; var arrbarang : lbarang);
 
 implementation
 
-  procedure loadFile(fname : string);
-  var
-    ft : text;
-    pil : integer;
-
-  begin
-    if(FileExists(fname)) then
-    begin
-      assign(ft,fname);
-      reset(ft);
-      writeln('Jenis file apa ini?');
-      writeln('1. Data Nasabah');
-      writeln('2. Data Rekening Online');
-      writeln('3. Data Histori Transaksi');
-      writeln('4. Data Histori Transfer');
-      writeln('5. Data Histori Pembayaran');
-      writeln('6. Data Histori Pembelian');
-      writeln('7. Data Kurs Mata Uang');
-      writeln('8. Data Barang');
-      writeln('----------------------------------------------------');
-      repeat
-        write('Pilihan Anda (masukkan nomor pilihan, 0 untuk batal): ');readln(pil);
-        if ((pil > 8) OR (pil < 0)) then writeln('Pilihan Anda salah!');
-      until (not((pil > 8) OR (pil < 0)));
-      case pil of
-      1 : loadallnasabah(ft);
-      2 : loadallrekonline(ft);
-      3 : loadalltransaksi(ft);
-      4 : loadalltransfer(ft);
-      5 : loadallbayar(ft);
-      6 : loadallbeli(ft);
-      7 : loadallkurs(ft);
-      8 : loadallbarang(ft);
-      0 : writeln('Batal load file.');
-      end;
-      close(ft);
-    end else writeln('Error : File ',fname,' tidak ditemukan!');
-  end;
-
-  procedure loadallnasabah(var f : text);
+  procedure loadallnasabah(var f : text; var arrnasabah : lnasabah);
     var
       s : string;
       c : char;
@@ -130,7 +77,7 @@ implementation
       arrnasabah.Neff := i-1;
     end;
 
-  procedure loadallrekonline(var f : text);
+  procedure loadallrekonline(var f : text; var arrrekonline : lrekonline);
     var
         s : string;
         c : char;
@@ -191,7 +138,7 @@ implementation
         arrrekonline.Neff := i-1;
     end;
 
-  procedure loadalltransaksi(var f : text);
+  procedure loadalltransaksi(var f : text; var arrtransaksi : ltrans);
     var
         i, j : integer;
         s : string;
@@ -247,10 +194,9 @@ implementation
         end;
         writeln();
         arrtransaksi.Neff := i-1;
-        testTulis();
     end;
 
-  procedure loadalltransfer(var f : text);
+  procedure loadalltransfer(var f : text; var arrtransfer : ltrf);
     var
         i, j : integer;
         s : string;
@@ -310,7 +256,7 @@ implementation
         arrtransfer.Neff := i-1;
     end;
 
-  procedure loadallbayar(var f : text);
+  procedure loadallbayar(var f : text; var arrbayar : lpembayaran);
     var
         i, j : integer;
         s : string;
@@ -369,7 +315,7 @@ implementation
         arrbayar.Neff := i-1;
     end;
 
-  procedure loadallbeli(var f : text);
+  procedure loadallbeli(var f : text; var arrbeli : lpembelian);
     var
         i, j : integer;
         s : string;
@@ -429,7 +375,7 @@ implementation
         arrbeli.Neff := i-1;
     end;
 
-  procedure loadallkurs(var f : text);
+  procedure loadallkurs(var f : text; var arrkurs : lkurs);
     var
         i, j : integer;
         s : string;
@@ -485,7 +431,7 @@ implementation
         arrkurs.Neff := i-1;
     end;
 
-  procedure loadallbarang(var f : text);
+  procedure loadallbarang(var f : text; var arrbarang : lbarang);
     var
         i, j : integer;
         s : string;
@@ -538,20 +484,6 @@ implementation
         end;
         writeln();
         arrbarang.Neff := i-1;
-        testTulis();
     end;
 
-  procedure testTulis(); // Fungsi ini hanya untuk debugging saja
-    var
-        i : integer;
-
-    begin
-        for i := 1 to arrbarang.Neff do
-        begin
-          writeln(arrbarang.list[i].jenis);
-          writeln(arrbarang.list[i].penyedia);
-          writeln(arrbarang.list[i].harga:0:2);
-          writeln();
-        end;
-    end;
 end.
