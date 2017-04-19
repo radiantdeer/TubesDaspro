@@ -3,6 +3,7 @@ unit banktype;
 interface
 const
   nmax=500;
+  maxkurs=50;
 type
   // SATU DATA Nasabah
    nasabah = record
@@ -121,7 +122,7 @@ type
 
 // List Kurs
   lkurs = record
-    list : array[1..nmax] of kurs;
+    list : array[1..maxkurs] of kurs;
     Neff : integer;
   end;
 
