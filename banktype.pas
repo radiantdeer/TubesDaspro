@@ -1,6 +1,8 @@
 unit banktype;
 
 interface
+const
+  nmax=500
 type
   // SATU DATA Nasabah
    nasabah = record
@@ -17,7 +19,7 @@ type
 
 // List Data Nasabah
   lnasabah = record
-    list : array[1..500] of nasabah;
+    list : array[1..nmax] of nasabah;
     Neff : integer;
   end;
 
