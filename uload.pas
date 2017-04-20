@@ -12,6 +12,11 @@ interface
   procedure loadallbeli(var f : text; var arrbeli : lpembelian);
   procedure loadallkurs(var f : text; var arrkurs : lkurs);
   procedure loadallbarang(var f : text; var arrbarang : lbarang);
+  { Untuk semua prosedur diatas, semuanya memiliki spesifikasi yang hampir sama sebagai berikut :
+    I.S. : Semua variabel parameter terdefinsi
+    F.S. : Variabel parameter array terisi dengan data dari f
+    Untuk bagian ini, masih mungkin dilakukan perampingan kode, karena banyaknya duplikasi kode dalam unit ini }
+
 
 implementation
 
