@@ -3,13 +3,9 @@ Program Setoran;
 
 uses banktype;
 
-{ Kamus }
-type
-	TabString = array [1..50] of string;
-	
+{ Kamus }	
 var
 	arrrekonline : lrekonline;
-	tempArray : TabString;
 	jenis : string;
 	jenisRek : integer;
 	noAk : string;
