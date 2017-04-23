@@ -36,7 +36,7 @@ begin
 		N:=0;
 		for i:=1 to arrrekonline.Neff do
 		begin
-			if (arrrekonline.list[i].jenis=jenis) then
+			if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
 			begin
 				N:=N+1;
 				tempArray[N]:=arrrekonline.list[i].noakun;
@@ -48,7 +48,7 @@ begin
 		N:=0;
 		for i:=1 to arrrekonline.Neff do
 		begin
-			if (arrrekonline.list[i].jenis=jenis) then
+			if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
 			begin
 				N:=N+1;
 				tempArray[N]:=arrrekonline.list[i].noakun;
@@ -60,7 +60,7 @@ begin
 		N:=0;
 		for i:=1 to arrrekonline.Neff do
 		begin
-			if (arrrekonline.list[i].jenis=jenis) then
+			if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
 			begin
 				N:=N+1;
 				tempArray[N]:=arrrekonline.list[i].noakun;
