@@ -1,86 +1,145 @@
 //dicky
 //menampilkan daftar rekening online
-program f3lihatrek;
-uses banktype;
-var
-	nodicari:string;//nomor nasabah yg dicari
-	found:=boolean;
-	opsirek:string;
+unit f3f4f5;
+interface
 
-	function caritab ()
-procedure lihatdatarek (pass:string, arrnasabah:lnasabah);
-// dari lnasabah, pass pake dari login
-begin
-	found:=false;
-	i:=1;
-	while (found=false) and (i<=Neff) do
+	uses banktype;
+	uses ulogin;
+	uses utanggal;
+	var
+		found:boolean;
+	procedure lihatdatarek (user, pass : string; T : lnasabah);
+		// IS: sudah login, adafungsi login yg hasilin output i
+		// FS: tampilkan info rekening online nasabah dari lnasabah
+	function carirekonline (noakun:string):integer;
+		//IS: harus sudah validasi login di tempat lain dulu sebelum panggil fungsi ini
+		//    dan pastikan found tdk mungkin false
+		//FS: output indeks dmn orang dgn noakun xxx berada di arrrekonline
+	procedure isrekada (jenistab:string);
+		// IS: login ada output bernilai i
+		// FS: menampilkan pilihan noakun pada sebuah jenis tabungan
+	procedure infosaldo(user, pass : string; T : lnasabah; var pilrek:integer; var noakun:string);
+		//IS : sudah login
+		//FS: menampilkan info saldo currentuser ssuai pilihan
+	
+implementation
+
+	procedure lihatdatarek (user, pass : string; T : lnasabah);
+	var
+		hitungrekonline:integer;
 	begin
-		if(pass=(arrnasabah.list[i].pass)) then //variabel pass asalnya dari password pass login
+		if(login(user, pass : string; T : lnasabah)>0) and (login(user, pass : string; T : lnasabah)=i)then
 		begin
-			found:=true;
+			hitungrekonline:=0;
+				for i:=1 to Neff do
+				begin
+					if((currentuser.nonasabah)=(arrrekonline.list[i].nonasabah)) then
+					begin
+						hitungrekonline:=hitungrekonline+1;
+						writeln('> Informasi Rekening Online ',hitungrekonline,' anda :');
+							writeln('> ',arrrekonline.list[i].noakun);
+							writeln('> ',arrrekonline.list[i].nonasabah);
+							writeln('> ',arrrekonline.list[i].jenis);
+							writeln('> ',arrrekonline.list[i].uang);
+							writeln('> ',arrrekonline.list[i].saldo);
+							writeln('> ',arrrekonline.list[i].setrutin);
+							writeln('> ',arrrekonline.list[i].autodebet);
+							writeln('> ',arrrekonline.list[i].waktu);
+							writeln('> ',arrrekonline.list[i].tglmulai);
+							writeln;
+					end;
+				end;
+				writeln('Anda Memiliki ',hitungrekonline,' jumlah rekening');
 		end else
 		begin
-			i:=i+1;
+			writeln('> silakan login terlebih dahulu');
 		end;
 	end;
-	if(found:=true) then
+	function carirekonline (noakun:string):integer;
 	begin
-		writeln('> Informasi Data Diri Rekening Online Milik Anda:');
-		writeln(arrnasabah.list[i].nonasabah);
-		writeln(arrnasabah.list[i].nama);
-		writeln(arrnasabah.list[i].alamat);
-		writeln(arrnasabah.list[i].kota);
-		writeln(arrnasabah.list[i].email);
-		writeln(arrnasabah.list[i].telp);
-		writeln(arrnasabah.list[i].user);
-		writeln(arrnasabah.list[i].pass);
-		writeln(arrnasabah.list[i].stat);
+		found:=false;
+		i:=1;
+		while (i<=Neff) and (found=false) do
+		begin
+			if(noakun=(arrrekonline.list[i].noakun)) then
+			begin
+				carirekonline:=i;
+			end else
+			begin
+				i:=i+1;
+			end;
+		end;
 	end;
-end;
-
-//procedure yg f4 di bawah blum selesai, jgn dicompile dulu, mau ambis fisika dulu
-procedure lihatinfosaldo(pass:string, Tab1:lnasabah, Tab2:lrekonline);
-begin
-	writeln('> informasiSaldo');
-	writeln('> Pilih jenis rekening:');
-	writeln('> 1. Deposito');
-	writeln('> 2. Tabungan Rencana');
-	writeln('> 3. Tabungan Mandiri');
-	write('> Jenis rekening: ');
-	readln(opsirek);
-	writeln('> Pilih rekening ',opsirek,' Anda: ');
-	writeln('> 1.');
-	readln(nodicari);
-	
-	
-	if(found:=true) then
+	procedure isrekada (jenistab:string);
 	begin
-	nodicari:=//nodicari asalnya dari nonasabah[i] dari [i] yg dicari pake password
-	hitungrekonline:=0;
 		for i:=1 to Neff do
 		begin
-			if(nodicari=(Tab2.list[i].nonasabah)) then
+			if((currentuser.nonasabah)=(arrrekonline.list[i].nonasabah)) then
 			begin
-			//bandingin nonasabah di tabnasabah & tabrekonline
-				hitungrekonline:=hitungrekonline+1;
-				writeln('> Informasi rekekning online ',hitungrekonline,' anda :');
-				writeln(Tab2.list[i].noakun);
-				writeln(Tab2.list[i].nonasabah);
-				writeln(Tab2.list[i].jenis);
-				writeln(Tab2.list[i].uang);
-				writeln(Tab2.list[i].saldo);
-				writeln(Tab2.list[i].setrutin);
-				writeln(Tab2.list[i].autodebet);
-				writeln(Tab2.list[i].waktu);
-				writeln(Tab2.list[i].tglmulai);
+				if((arrrekonline.list[i].nonasabah)=jenistab) then
+				begin
+					writeln('> Pilih rekening ',jenistab,' Anda: ');
+					write('> ',arrrekonline.list[i].noakun);
+				end else
+				begin
+					writeln('> Anda tidak mempunyai ',jenistab);
+				end;
 			end;
-			writeln;
 		end;
-		writeln;
-		writeln('anda memiliki ',hitungrekonline,' jumlah rekening');
 	end;
-end;
-
-begin
-	
+	procedure infosaldo(user, pass : string; T : lnasabah; var pilrek:integer; var noakun:string);
+	var
+		inaktif:integer;
+	begin
+		if(login(user, pass : string; T : lnasabah)>0) and (login(user, pass : string; T : lnasabah)=i)then
+		begin
+			writeln('> informasiSaldo');
+			writeln('> Pilih jenis rekening:');
+			writeln('> 1. Deposito');
+			writeln('> 2. Tabungan Rencana');
+			writeln('> 3. Tabungan Mandiri');
+			write('> Jenis rekening: ');
+			readln(pilrek);
+				if(pilrek=1) then
+				begin
+					isrekada('deposito');
+				end else if(pilrek=2) then
+				begin
+					isrekada('tabungan rencana');
+				end else if(pilrek=3) then
+				begin
+					isrekada('tabungan mandiri');
+				end else
+				begin
+					repeat
+						writeln('Harap masukkan pilihan opsi yang tersedia')
+						readln(pilrek);
+					until((pilrek>=1) and (pilrek<=3));//validasi, akan diulang sampai input angka benar
+				end;
+			readln(noakun);
+			inaktif:=carirekonline(noakun);
+			writeln('> Nomor rekening : ',noakun);
+			writeln('> Tanggal Mulai : ',arrrekonline.list[inaktif].tglmulai);
+			writeln('> Mata Uang : ',arrrekonline.list[inaktif].uang);
+			writeln('> Jangka Waktu : ',arrrekonline.list[inaktif].waktu);
+			writeln('> Setoran Rutin : ',arrrekonline.list[inaktif].setrutin);
+			writeln('> Saldo : ',arrrekonline.list[inaktif].saldo);
+			writeln('> ');
+		end else
+		begin
+			writeln('> silakan login terlebih dahulu');
+		end;
+	end;
+	procedure lihattransaksi ();
+	var
+		
+	begin
+		if(login(user, pass : string; T : lnasabah)>0) and (login(user, pass : string; T : lnasabah)=i)then
+		begin
+			
+		end else
+		begin
+			writeln('> silakan login terlebih dahulu');
+		end;
+	end;
 end.
