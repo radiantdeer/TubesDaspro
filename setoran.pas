@@ -1,12 +1,14 @@
 Program Setoran;
 { Menyetor sejumlah uang secara tunai ke suatu rekening tertentu }
 
-uses banktype;
+uses sysutils, banktype;
 
 { Kamus }	
 var
 	arrrekonline : lrekonline;
+	arrtransaksi : ltrans;
 	tempArray : array [1..50] of string;
+	currentuser : nasabah;
 	jenis : string;
 	jenisRek : integer;
 	noAk : string;
@@ -89,6 +91,13 @@ begin
 		write('> Jumlah setoran: ');
 		readln(jumlahSetor);
 		arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo+jumlahSetor;
+		arrtransaksi.Neff:=arrtransaksi.Neff+1;
+		arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[i].noakun;
+		arrtransaksi.list[arrtransaksi.Neff].jenis:=jenis;
+		arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[i].uang;
+		arrtransaksi.list[arrtransaksi.Neff].jumlah:=jumlahSetor;
+		arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[i].saldo;
+		arrtransaksi.list[arrtransaksi.Neff].tgl:=DateTimeToStr(Now);
 		writeln('> Setoran berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo);
 	end else
 		writeln('> Anda tidak mempunyai ',jenis);
