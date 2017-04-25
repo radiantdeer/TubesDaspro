@@ -3,7 +3,7 @@ unit ulogin;
 interface
   uses banktype;
 // List semua fungsi/prosedur yang tersedia di unit ini
-function login(user, pass : string; T : lnasabah) : integer;
+function login_do(user, pass : string; T : lnasabah) : integer;
 { I.S. : user, pass, T terdefinisi
   F.S. : login bernilai 0 jika user/pass salah, atau integer positif yang menyatakan posisi data tersebut dalam array T.list
   Menggunakan fungsi isUserExists dalam implementasinya }
@@ -13,7 +13,7 @@ function isUserExists(user : string; T : lnasabah) : integer;
   yang menyatakan posisi data tersebut dalam array T.list jika user ditemukan }
 
 implementation
-  function login(user, pass : string; T : lnasabah) : integer;
+  function login_do(user, pass : string; T : lnasabah) : integer;
   var
     loc : integer;
 
@@ -21,9 +21,9 @@ implementation
     loc := isUserExists(user, T);
     if (loc <> 0) then
     begin
-      if (pass = T.list[loc].pass) then login := loc
-      else login := 0;
-    end else login := 0;
+      if (pass = T.list[loc].pass) then login_do := loc
+      else login_do := 0;
+    end else login_do := 0;
   end;
 
   function isUserExists(user : string; T : lnasabah) : integer;
