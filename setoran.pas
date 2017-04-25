@@ -17,7 +17,7 @@ var
 	N : integer;
 	i : integer; { Iterasi }
 
-{ Algoritma - Program Utama }
+{ Algoritma }
 begin
 	writeln('> Pilih jenis rekening:');
 	writeln('> 1. Deposito');
