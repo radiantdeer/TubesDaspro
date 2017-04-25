@@ -1,7 +1,7 @@
 Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
-uses uload, ulogin, banktype, sysutils, crt;
+uses uload, ulogin, banktype, uexit, sysutils, crt;
 // u<str> : Unit yang memuat fungs-fungsi yang berkaitan dengan <str> bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
@@ -44,64 +44,64 @@ begin
     begin
       case cmd of // Ketika kode-kode yang bersangkutan sudah selesai, gantilah blok kode dibawah dengan yang relevan
         'load' : begin
-                  write('Load file : ');readln(fname); // Menanyakan file yang ingin dimuat
-                  if(FileExists(fname)) then // Pengecekan apakah file memang ada
-                    begin
-                      assign(ft,fname);
-                      reset(ft);
-                      // Menanyakan file ini jenis apa
-                      writeln('Jenis file apa ini?');
-                      writeln('1. Data Nasabah');
-                      writeln('2. Data Rekening Online');
-                      writeln('3. Data Histori Transaksi');
-                      writeln('4. Data Histori Transfer');
-                      writeln('5. Data Histori Pembayaran');
-                      writeln('6. Data Histori Pembelian');
-                      writeln('7. Data Kurs Mata Uang');
-                      writeln('8. Data Barang');
-                      writeln('----------------------------------------------------');
-                      repeat
-                        write('Pilihan Anda (masukkan nomor pilihan, 0 untuk batal): ');readln(pil);
-                        if ((pil > 8) OR (pil < 0)) then writeln('Pilihan Anda salah!');
-                      until (not((pil > 8) OR (pil < 0)));
-                      case pil of // Memuat file sesuai masukan diatas. Belum ada validasi format file
-                      1 : begin
-                            loadallnasabah(ft, arrnasabah);
-                            loadedFile[1] := fname; // Marker bahwa data suatu file telah dimuat ke dalam array
-                          end;
-                      2 : begin
-                            loadallrekonline(ft, arrrekonline);
-                            loadedFile[2] := fname;
-                          end;
-                      3 : begin
-                            loadalltransaksi(ft, arrtransaksi);
-                            loadedFile[3] := fname;
-                          end;
-                      4 : begin
-                            loadalltransfer(ft, arrtransfer);
-                            loadedFile[4] := fname;
-                          end;
-                      5 : begin
-                            loadallbayar(ft, arrbayar);
-                            loadedFile[5] := fname;
-                          end;
-                      6 : begin
-                            loadallbeli(ft, arrbeli);
-                            loadedFile[6] := fname;
-                          end;
-                      7 : begin
-                            loadallkurs(ft, arrkurs);
-                            loadedFile[7] := fname;
-                          end;
-                      8 : begin
-                            loadallbarang(ft, arrbarang);
-                            loadedFile[8] := fname;
-                          end;
-                      0 : writeln('Batal load file.');
-                      end;
-                      close(ft);
-                    end
-                  else { File tidak ada/ditemukan } writeln('Error : File ',fname,' tidak ditemukan!');
+          write('Load file : ');readln(fname); // Menanyakan file yang ingin dimuat
+          if(FileExists(fname)) then // Pengecekan apakah file memang ada
+            begin
+              assign(ft,fname);
+              reset(ft);
+              // Menanyakan file ini jenis apa
+              writeln('Jenis file apa ini?');
+              writeln('1. Data Nasabah');
+              writeln('2. Data Rekening Online');
+              writeln('3. Data Histori Transaksi');
+              writeln('4. Data Histori Transfer');
+              writeln('5. Data Histori Pembayaran');
+              writeln('6. Data Histori Pembelian');
+              writeln('7. Data Kurs Mata Uang');
+              writeln('8. Data Barang');
+              writeln('----------------------------------------------------');
+              repeat
+                write('Pilihan Anda (masukkan nomor pilihan, 0 untuk batal): ');readln(pil);
+                if ((pil > 8) OR (pil < 0)) then writeln('Pilihan Anda salah!');
+              until (not((pil > 8) OR (pil < 0)));
+              case pil of // Memuat file sesuai masukan diatas. Belum ada validasi format file
+              1 : begin
+                    loadallnasabah(ft, arrnasabah);
+                    loadedFile[1] := fname; // Marker bahwa data suatu file telah dimuat ke dalam array
+                  end;
+              2 : begin
+                    loadallrekonline(ft, arrrekonline);
+                    loadedFile[2] := fname;
+                  end;
+              3 : begin
+                    loadalltransaksi(ft, arrtransaksi);
+                    loadedFile[3] := fname;
+                  end;
+              4 : begin
+                    loadalltransfer(ft, arrtransfer);
+                    loadedFile[4] := fname;
+                  end;
+              5 : begin
+                    loadallbayar(ft, arrbayar);
+                    loadedFile[5] := fname;
+                  end;
+              6 : begin
+                    loadallbeli(ft, arrbeli);
+                    loadedFile[6] := fname;
+                  end;
+              7 : begin
+                    loadallkurs(ft, arrkurs);
+                    loadedFile[7] := fname;
+                  end;
+              8 : begin
+                    loadallbarang(ft, arrbarang);
+                    loadedFile[8] := fname;
+                  end;
+              0 : writeln('Batal load file.');
+              end;
+              close(ft);
+            end
+          else { File tidak ada/ditemukan } writeln('Error : File ',fname,' tidak ditemukan!');
                  end;
         'login' : begin
                     if(loadedFile[1] <> '') then // Mengecek apakah data nasabah sudah dimuat atau belum.
@@ -159,6 +159,12 @@ begin
       end;
     end;
   until(cmd = 'exit');
-  // exit(); Nanti kalau sudah diimplementasikan
+
+  if(loadedFile[1] <> '') then
+  begin
+    writeln('Menyimpan data ke file ',loadedFile[1]);
+    savefilenasabah(loadedFile[1],arrnasabah);
+  end;
+
   writeln('Goodbye...');
 end.

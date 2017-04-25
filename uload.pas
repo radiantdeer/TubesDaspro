@@ -17,7 +17,6 @@ interface
     F.S. : Variabel parameter array terisi dengan data dari f
     Untuk bagian ini, masih mungkin dilakukan perampingan kode, karena banyaknya duplikasi kode dalam unit ini }
 
-
 implementation
 
   procedure loadallnasabah(var f : text; var arrnasabah : lnasabah);
