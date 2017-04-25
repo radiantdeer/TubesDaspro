@@ -1,2 +1,2 @@
-1XY789 | 2HE297 | dalam bank | - | IDR | 500000 | 5310000 | 23-09-2016
+1XY789 | 2HE297 | dalam bank | - | IDR | 500000 | 5310000 | 23-09-2016
 1XY789 | DFTR23 | antar bank | Bank PQR | IDR | 500000 | 4910000 | 24-09-2016
