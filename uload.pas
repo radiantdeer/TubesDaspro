@@ -33,7 +33,7 @@ implementation
       while (not(EOF(f))) do
       begin
         read(f,c);
-        while ((c <> Chr(10)) AND (not(EOF(f)))) do // Chr(10) converts the ASCII code of 10 to the line ending/ENTER
+        while ((c <> Chr(10)) AND (not(EOF(f)))) do // 10 adalah kode ASCII untuk line break/ENTER. Chr(10) mengkonversi kode 10 menjadi itu
         begin
           if (c = '|') then
           begin
@@ -58,14 +58,14 @@ implementation
             j := j + 1;
           end else s := s + c;
           read(f,c);
-          if (c = Chr(10)) then // Catching the last element of the data
+          if (c = Chr(10)) then // Menangkap elemen data terakhir dari 'satu set' data
           begin
             delete(s,1,1);
             arrnasabah.list[i].stat := s;
             s := '';
             j := j + 1;
           end;
-          if (EOF(f)) then // This will fix the issue that the last character always get cut
+          if (EOF(f)) then // Menangkap huruf terakhir dalam sebuah file agar tidak terpotong
           begin
             delete(s,1,1);
             arrnasabah.list[i].stat := s + c;
@@ -351,7 +351,7 @@ implementation
               5 : arrbeli.list[i].uang := s;
               6 : arrbeli.list[i].jumlah := StrToFloat(s);
               7 : arrbeli.list[i].saldoakhir := StrToFloat(s);
-              // Kasus j mod 7 = 0 tidak akan pernah masuk ke bagian analisis kasus ini, karena tidak pernah bertemu '|'.
+              // Kasus j mod 8 = 0 tidak akan pernah masuk ke bagian analisis kasus ini, karena tidak pernah bertemu '|'.
               end;
               s := '';
               j := j + 1;
@@ -407,7 +407,7 @@ implementation
               1 : arrkurs.list[i].nawal := StrToFloat(s);
               2 : arrkurs.list[i].awal := s;
               3 : arrkurs.list[i].nakhir := StrToFloat(s);
-              // Kasus j mod 7 = 0 tidak akan pernah masuk ke bagian analisis kasus ini, karena tidak pernah bertemu '|'.
+              // Kasus j mod 4 = 0 tidak akan pernah masuk ke bagian analisis kasus ini, karena tidak pernah bertemu '|'.
               end;
               s := '';
               j := j + 1;
@@ -462,7 +462,7 @@ implementation
               case (j mod 3) of
               1 : arrbarang.list[i].jenis := s;
               2 : arrbarang.list[i].penyedia := s;
-              // Kasus j mod 7 = 0 tidak akan pernah masuk ke bagian analisis kasus ini, karena tidak pernah bertemu '|'.
+              // Kasus j mod 3 = 0 tidak akan pernah masuk ke bagian analisis kasus ini, karena tidak pernah bertemu '|'.
               end;
               s := '';
               j := j + 1;

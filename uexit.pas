@@ -18,18 +18,21 @@ interface
   procedure savefilepembelian(fname : string; T : lpembelian);
   procedure savefilekurs(fname : string; T : lkurs);
   procedure savefilebarang(fname : string; T : lbarang);
+  { Untuk semua prosedur diatas, semuanya memliki spesifikasi yang hampir sama sebagai berikut :
+    I.S. : Semua variabel parameter terdefinisi, T mungkin kosong, dan file fname sudah divalidasi di program utama
+    F.S. : Jika T kosong, maka prosedur langsung keluar disertai pesan, jika T ada data, maka data akan dimasukkan ke file fname }
 
 implementation
 
   procedure savefilenasabah(fname : string; T : lnasabah);
 
     begin
-      if (T.Neff = 0) then writeln('Tidak ada data yang disimpan!')
+      if (T.Neff = 0) then writeln('Tidak ada data yang disimpan!') // Array kosong
       else
       begin
         assign(ft,fname);
         rewrite(ft);
-        for i := 1 to T.Neff do
+        for i := 1 to T.Neff do // Bagian penulisan array ke file
         begin
           write(ft,T.list[i].nonasabah);
           write(ft,' | ');
@@ -48,21 +51,23 @@ implementation
           write(ft,T.list[i].pass);
           write(ft,' | ');
           write(ft,T.list[i].stat);
-          if (i <> T.Neff) then writeln(ft);
+          if (i <> T.Neff) then writeln(ft); // Pengecekan apabila sudah data terakhir, maka file tidak diberikan line break
         end;
         close(ft);
       end;
     end;
 
+    // Karena semua prosedur ini memiliki runtutan proses yang sama, komentar untuk prosedur dibawah mengikuti komentar diatas
+
   procedure savefilerekening(fname : string; T : lrekonline);
 
     begin
-      if (T.Neff = 0) then writeln('Tidak ada data yang disimpan!')
+      if (T.Neff = 0) then writeln('Tidak ada data yang disimpan!') // Array kosong
       else
       begin
         assign(ft,fname);
         rewrite(ft);
-        for i := 1 to T.Neff do
+        for i := 1 to T.Neff do // Bagian penulisan array ke file
         begin
           write(ft,T.list[i].noakun);
           write(ft,' | ');
@@ -72,7 +77,7 @@ implementation
           write(ft,' | ');
           write(ft,T.list[i].uang);
           write(ft,' | ');
-          write(ft,FloatToStr(T.list[i].saldo));
+          write(ft,FloatToStr(T.list[i].saldo)); // FloatToStr mengubah data real menjadi string, agar data bisa dimasukkan
           write(ft,' | ');
           write(ft,FloatToStr(T.list[i].setrutin));
           write(ft,' | ');

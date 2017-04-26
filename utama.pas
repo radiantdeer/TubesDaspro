@@ -2,15 +2,16 @@ Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
 uses uload, ulogin, banktype, uexit, sysutils, crt;
-// u<str> : Unit yang memuat fungs-fungsi yang berkaitan dengan <str> bank
+// u<str> : Unit yang memuat fungsi-fungsi yang berkaitan dengan <str> bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
 
 { KAMUS }
 var
   cmd, fname, user, pass : string;
+  { cmd : penampung masukan perintah dari user }
   ft : text;
-  pil, attempt, i : integer;
+  pil, attempt, i : integer; { attempt : menampung jumlah 'retries' yang tersisa jika user salah memasukan data saat login }
   // Variabel dibawah adalah variabel pendukung data internal bank
   arrnasabah : lnasabah;
   arrrekonline : lrekonline;
@@ -87,6 +88,7 @@ var
           0 : writeln('Batal load file.');
           end;
           close(ft);
+          if (pil <> 0) then writeln('Pembacaan file berhasil');
         end
       else { File tidak ada/ditemukan } writeln('Error : File ',fname,' tidak ditemukan!');
     end;
@@ -122,7 +124,7 @@ var
               writeln('Anda hanya memiliki ',attempt,' kesempatan lagi!');
             end;
           end;
-        end else { Sudah ada yang login, karena currentuser.nonasabah tidak kosong/''}
+        end else { Sudah ada yang login, karena currentuser.nonasabah tidak kosong/'' }
         begin
           writeln('Anda sudah login!');
         end;
@@ -190,7 +192,7 @@ begin
   attempt := 3;
 
   writeln('Selamat datang di sistem bank XYZ!');
-  writeln('Tanggal dan waktu sekarang adalah ',DateTimeToStr(Now));
+  writeln('Tanggal dan waktu sekarang adalah ',FormatDateTime('DD-MM-YYYY',Now)); // Menampilkan tanggal sekarang
   repeat
     write('XYZ > ');readln(cmd); // Menanyakan perintah
     if (not(cmd = 'exit')) then

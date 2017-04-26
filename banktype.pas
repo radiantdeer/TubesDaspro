@@ -1,4 +1,5 @@
 unit banktype;
+// Mengandung semua deklarasi tipe yang digunakan dalam program bank
 
 interface
 const
