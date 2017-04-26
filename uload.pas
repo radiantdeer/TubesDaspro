@@ -4,6 +4,8 @@ interface
 
   uses sysutils, banktype;
 // Daftar semua fungsi dan prosedur yang tersedia di unit ini
+  procedure load();
+  { Bagian utama yang menangani loading file, dengan memanggil subprogram yang sesuai untuk file tertentu }
   procedure loadallnasabah(var f : text; var arrnasabah : lnasabah);
   procedure loadallrekonline(var f : text; var arrrekonline : lrekonline);
   procedure loadalltransaksi(var f : text; var arrtransaksi : ltrans);
@@ -18,6 +20,70 @@ interface
     Untuk bagian ini, masih mungkin dilakukan perampingan kode, karena banyaknya duplikasi kode dalam unit ini }
 
 implementation
+
+procedure load();
+
+  begin
+    write('Load file : ');readln(fname); // Menanyakan file yang ingin dimuat
+    if(FileExists(fname)) then // Pengecekan apakah file memang ada
+      begin
+        assign(ft,fname);
+        reset(ft);
+        // Menanyakan konten dari file ini
+        writeln('Jenis file apa ini?');
+        writeln('1. Data Nasabah');
+        writeln('2. Data Rekening Online');
+        writeln('3. Data Histori Transaksi');
+        writeln('4. Data Histori Transfer');
+        writeln('5. Data Histori Pembayaran');
+        writeln('6. Data Histori Pembelian');
+        writeln('7. Data Kurs Mata Uang');
+        writeln('8. Data Barang');
+        writeln('----------------------------------------------------');
+        repeat // Validasi input sampai benar
+          write('Pilihan Anda (masukkan nomor pilihan, 0 untuk batal): ');readln(pil);
+          if ((pil > 8) OR (pil < 0)) then writeln('Pilihan Anda salah!');
+        until (not((pil > 8) OR (pil < 0)));
+        case pil of // Memuat file sesuai masukan diatas.
+        1 : begin
+              loadallnasabah(ft, arrnasabah); // Pemanggilan subprogram yang sesuai
+              loadedFile[1] := fname; // Marker bahwa data suatu file telah dimuat ke dalam array
+            end;
+        2 : begin
+              loadallrekonline(ft, arrrekonline);
+              loadedFile[2] := fname;
+            end;
+        3 : begin
+              loadalltransaksi(ft, arrtransaksi);
+              loadedFile[3] := fname;
+            end;
+        4 : begin
+              loadalltransfer(ft, arrtransfer);
+              loadedFile[4] := fname;
+            end;
+        5 : begin
+              loadallbayar(ft, arrbayar);
+              loadedFile[5] := fname;
+            end;
+        6 : begin
+              loadallbeli(ft, arrbeli);
+              loadedFile[6] := fname;
+            end;
+        7 : begin
+              loadallkurs(ft, arrkurs);
+              loadedFile[7] := fname;
+            end;
+        8 : begin
+              loadallbarang(ft, arrbarang);
+              loadedFile[8] := fname;
+            end;
+        0 : writeln('Batal load file.');
+        end;
+        close(ft);
+        if (pil <> 0) then writeln('Pembacaan file berhasil');
+      end
+    else { File tidak ada/ditemukan } writeln('Error : File ',fname,' tidak ditemukan!');
+  end;
 
   procedure loadallnasabah(var f : text; var arrnasabah : lnasabah);
     var

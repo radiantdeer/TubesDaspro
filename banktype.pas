@@ -140,6 +140,26 @@ type
     Neff : integer;
   end;
 
+  // Variabel dibawah adalah variabel pendukung data internal bank
+var
+  cmd, fname, user, pass : string;
+  { cmd : penampung masukan perintah dari user }
+  ft : text;
+  pil, attempt, i : integer;
+   { attempt : menampung jumlah 'retries' yang tersisa jika user salah memasukan data saat login }
+  arrnasabah : lnasabah;
+  arrrekonline : lrekonline;
+  arrtransaksi : ltrans;
+  arrtransfer : ltrf;
+  arrbayar : lpembayaran;
+  arrbeli : lpembelian;
+  arrkurs : lkurs;
+  arrbarang : lbarang;
+
+  // Array untuk menampung nama file apa saja yang sudah dimuat ke array internal
+  // 1 : nama file nasabah, 2 : nama file rekening online, dst... (lihat urutan array diatas)
+  loadedFile : array[1..8] of string;
+  currentuser : nasabah;   // Variabel menampung user yang sedang login sekarang
 implementation
 
 end.

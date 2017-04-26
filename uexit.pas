@@ -10,6 +10,9 @@ interface
     i : integer;
 
 // List semua prosedur dan fungsi yang tersedia
+  procedure exit();
+  { Pengecekan apakah suatu file telah diload sebelum program exit
+    Jika file belum dimuat, maka tidak akan dipanggil fungsi untuk menyimpan kembali data }
   procedure savefilenasabah(fname : string; T : lnasabah);
   procedure savefilerekening(fname : string; T : lrekonline);
   procedure savefiletrans(fname : string; T : ltrans);
@@ -23,6 +26,51 @@ interface
     F.S. : Jika T kosong, maka prosedur langsung keluar disertai pesan, jika T ada data, maka data akan dimasukkan ke file fname }
 
 implementation
+
+procedure exit();
+
+  begin
+    if(loadedFile[1] <> '') then // Jika ada, maka akan menyimpan data file nasabah
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[1]);
+      savefilenasabah(loadedFile[1],arrnasabah);
+    end;
+    if(loadedFile[2] <> '') then // Jika ada, maka akan menyimpan data file rekening online
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[2]);
+      savefilerekening(loadedFile[2],arrrekonline);
+    end;
+    if(loadedFile[3] <> '') then // Jika ada, maka akan menyimpan data file histori transaksi
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[3]);
+      savefiletrans(loadedFile[3],arrtransaksi);
+    end;
+    if(loadedFile[4] <> '') then // Jika ada, maka akan menyimpan data file histori transfer
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[4]);
+      savefiletrf(loadedFile[4],arrtransfer);
+    end;
+    if(loadedFile[5] <> '') then // Jika ada, maka akan menyimpan data file histori pembayaran
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[5]);
+      savefilepembayaran(loadedFile[5],arrbayar);
+    end;
+    if(loadedFile[6] <> '') then // Jika ada, maka akan menyimpan data file histori pembelian
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[6]);
+      savefilepembelian(loadedFile[6],arrbeli);
+    end;
+    if(loadedFile[7] <> '') then // Jika ada, maka akan menyimpan data file kurs
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[7]);
+      savefilekurs(loadedFile[7],arrkurs);
+    end;
+    if(loadedFile[8] <> '') then // Jika ada, maka akan menyimpan data file daftar barang yang tersedia
+    begin
+      writeln('Menyimpan data ke file ',loadedFile[8]);
+      savefilebarang(loadedFile[8],arrbarang);
+    end;
+  end;
 
   procedure savefilenasabah(fname : string; T : lnasabah);
 
