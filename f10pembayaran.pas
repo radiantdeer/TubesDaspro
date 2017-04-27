@@ -1,6 +1,22 @@
 //aldo
 
+ // SATU DATA Histori Pembayaran
+        pembayaran = record
+          noakun : string;
+          jenis : string;
+          nomorbayar : string;
+          uang : string;
+          jumlah : real;
+          saldoakhir : real;
+          tgl : string;
+        end;
 
+      // List Histori Pembayaran
+        lpembayaran = record
+          list : array[1..nmax] of pembayaran;
+          Neff : integer;
+        end;
+	
 	Procedure Pembayaran (Var R : DataRekening; Idx : daftarIndex; var B : DataPembayaran; Tanggal : Array of Word; T: DataNilaiTukar);
 		Var
 			i,j		: Integer;
@@ -68,56 +84,5 @@
 					B.listPembayaran[B.Neff].jumlah := jumB;
 					B.listPembayaran[B.Neff].saldoAkhir := R1.saldo;
 					B.listPembayaran[B.Neff].tanggal := Tanggal;
-				end;
-		end;
-					
-	Procedure Pembelian (Var R : DataRekening; Idx : daftarIndex; var B : DataPembelian; Tanggal : Array of Word; T: DataNilaiTukar);
-		Var
-			i,j		 	: Integer;
-			R1 			: T_Rekening;
-			Jen,Com,NT	: String;
-			Jum			: longint;
-			
-		Begin
-			PilihRekening(R,Idx,i);
-			R1 := R.listRekening[i];
-			If BolehAmbil(R1,Tanggal) then
-				Writeln('Waktu Batas Pengambilan Belum Lewat, Transaksi Gagal')
-			else
-				Begin
-					writeln ('Pilih Jenis Pembelian');
-					writeln('	1. Voucher HP');
-					writeln('	2. Listrik');
-					writeln('	3. Taksi Online');
-					write ('Jenis Transaksi Pembayaran : ');
-					readln(J);
-					case j of
-						1 : Jen := 'Voucher HP';
-						2 : Jen := 'Listrik';
-						3 : Jen := 'Taksi Online';
-					else
-						Begin
-							Write ('Jenis Transaksi : ');
-							readln(Jen);
-						end;
-					end;
-					
-					write('Penyedia Barang : ');
-					readln(Com);
-					write('Nomor Tujuan : ');
-					readln(NT);
-					writeln('Masukkan Jumlah yang ingin dibayar');
-					ValidJumlah (R1, jum);
-					R1.saldo := R1.saldo - jum;
-					R.listRekening[i] := R1;
-					B.Neff := B.Neff + 1;
-					B.listPembelian[B.Neff].noAkun := R1.noAkun;
-					B.listPembelian[B.Neff].jenisBarang := jen;
-					B.listPembelian[B.Neff].penyedia := Com;
-					B.listPembelian[B.Neff].noTujuan := NT;
-					B.listPembelian[B.Neff].mataUang := R1.mataUang;
-					B.listPembelian[B.Neff].jumlah := jum;
-					B.listPembelian[B.Neff].saldoAkhir := R1.saldo;
-					B.listPembelian[B.Neff].tanggal := Tanggal;
 				end;
 		end;
