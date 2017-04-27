@@ -11,7 +11,8 @@ interface
 		// FS: tampilkan info rekening online nasabah dari lnasabah
 	function carirekonline (noakun:string):integer;
 		//IS: harus sudah validasi login di tempat lain dulu sebelum panggil fungsi ini
-		//FS: output indeks dmn orang dgn noakun xxx berada di arrrekonline, klo true indeks=i , klo false indeks=0
+		//FS: output indeks dmn orang dgn noakun xxx berada di arrrekonline
+		//    klo found = true maka indeks=i , klo found = false maka indeks=0
 	procedure isrekada (jenistab:string);
 		// IS: login ada output bernilai i
 		// FS: menampilkan pilihan noakun pada sebuah jenis tabungan
