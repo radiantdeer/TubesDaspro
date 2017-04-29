@@ -14,23 +14,6 @@ var
 	listkurs : lkurs;
 	currentuser : nasabah;
 	
-procedure menu (var pil : integer);
-var
-	i : integer;
-begin
-		for i := 1 to listbrg.neff do
-		begin
-			writeln('> ',i,'. ',listbrg.list[i].jenis, ' | ',listbrg.list[i].penyedia, ' | ',listbrg.list[i].harga:0:0);
-		end;
-		repeat
-			writeln('> Masukkan pilihan anda : ');
-			write('> ');
-			readln(pil);
-			if (pil <1) and (pil >12) then
-				writeln('> Pilihan tidak valid. Silakan coba lagi');
-		until (pil >0) and (pil < 13);
-end;
-
 function gantikurs (awal : string; akhir : string;saldo : real) : real;
 var
 	i : integer;
@@ -165,6 +148,7 @@ begin
 				success:=true;
 			end else if (jenis='deposito') or (jenis='tabungan rencana') and (arrrekonline.list[i].saldo>=harga) then //Ubah di sini
 			begin
+				if()
 				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 				success:=true;
 			end else
@@ -191,32 +175,32 @@ begin
 		writeln('> Anda tidak mempunyai ',jenis,'.');
 	end;
 end;
-	
-procedure pilihmenu(pil : integer);
+
+procedure menu;
 var
+	i : integer;
 	nomor : string;
+	
 begin
+	for i := 1 to listbrg.neff do
+		begin
+			writeln('> ',i,'. ',listbrg.list[i].jenis, ' | ',listbrg.list[i].penyedia, ' | ',listbrg.list[i].harga:0:0);
+		end;
+		repeat
+			writeln('> Masukkan pilihan anda : ');
+			write('> ');
+			readln(pil);
+			if (pil <1) and (pil >listbrg.neff) then
+				writeln('> Pilihan tidak valid. Silakan coba lagi');
+	until (pil >=1) and (pil <= listbrg.neff);
 	writeln('> Masukkan nomor tujuan :');
 	write('> ');
 	readln(nomor);
-	case pil of
-			1 : bayar(listbrg.list[1].harga,1,nomor);
-			2 : bayar(listbrg.list[2].harga,2,nomor);
-			3 : bayar(listbrg.list[3].harga,3,nomor);
-			4 : bayar(listbrg.list[4].harga,4,nomor);
-			5 : bayar(listbrg.list[5].harga,5,nomor);
-			6 : bayar(listbrg.list[6].harga,6,nomor);
-			7 : bayar(listbrg.list[7].harga,7,nomor);
-			8 : bayar(listbrg.list[8].harga,8,nomor);
-			9 : bayar(listbrg.list[9].harga,9,nomor);
-			10 : bayar(listbrg.list[10].harga,10,nomor);
-	end;	
+	bayar(listbrg.list[pil].harga,pil,nomor);
 end;
 
 {ALGORITMA UTAMA}
 begin
-	menu(pil);
-	pilihmenu(pil);
-	
+	menu;
 end.
 	
