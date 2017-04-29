@@ -23,6 +23,9 @@ begin
 	writeln('> 1. Deposito');
 	writeln('> 2. Tabungan rencana');
 	writeln('> 3. Tabungan mandiri');
+	{ Validasi masukan jenis rekening }
+	{ Pengulangan akan berhenti jika pengguna memasukkan jenis rekening 
+	  yang tepat, yaitu 1, 2, atau 3 }
 	stop:=false;
 	repeat
 		write('> Jenis rekening : ');
@@ -32,6 +35,10 @@ begin
 		else
 			writeln('> Jenis rekening yang Anda masukkan salah!');
 	until stop;
+	{ Mendaftarkan nomor akun rekening-rekening milik pengguna ke array 
+	  tempArray sesuai dengan masukan jenis rekening }
+	{ N adalah banyaknya rekening milik pengguna dengan jenis tertentu
+	  sesuai masukan pengguna }
 	if (jenisRek=1) then
 	begin
 		jenis:='deposito';
@@ -71,6 +78,8 @@ begin
 	end;
 	if (N>0) then
 	begin
+		{ Menampilkan nomor akun rekening-rekening yang tersimpan pada
+		  array tempArray }
 		writeln('> Pilih rekening ',jenis,' Anda:');
 		for i:=1 to N do
 		begin
@@ -78,27 +87,32 @@ begin
 		end;
 		write('> Rekening: ');
 		readln(noAk);
-		{ Asumsikan nomor akun yang dimasukkan pengguna benar }
+		{ Pencarian indeks nomor akun rekening yang dimasukkan pengguna }
 		found:=false;
 		i:=1;
-		while (not(found)) do
+		while (i<=arrrekonline.Neff) and (not(found)) do
 		begin
 			if (arrrekonline.list[i].noakun=noAk) then
 				found:=true
 			else
 				i:=i+1;
 		end;
-		write('> Jumlah setoran: ');
-		readln(jumlahSetor);
-		arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo+jumlahSetor;
-		arrtransaksi.Neff:=arrtransaksi.Neff+1;
-		arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[i].noakun;
-		arrtransaksi.list[arrtransaksi.Neff].jenis:='setoran';
-		arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[i].uang;
-		arrtransaksi.list[arrtransaksi.Neff].jumlah:=jumlahSetor;
-		arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[i].saldo;
-		arrtransaksi.list[arrtransaksi.Neff].tgl:=DateTimeToStr(Now);
-		writeln('> Setoran berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo);
-	end else
+		if found then
+		begin
+			write('> Jumlah setoran: ');
+			readln(jumlahSetor);
+			arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo+jumlahSetor;
+			{ Update array transaksi setoran/penarikan }
+			arrtransaksi.Neff:=arrtransaksi.Neff+1;
+			arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[i].noakun;
+			arrtransaksi.list[arrtransaksi.Neff].jenis:='setoran';
+			arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[i].uang;
+			arrtransaksi.list[arrtransaksi.Neff].jumlah:=jumlahSetor;
+			arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[i].saldo;
+			arrtransaksi.list[arrtransaksi.Neff].tgl:=DateTimeToStr(Now);
+			writeln('> Setoran berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo);
+		end else { not(found) }
+			writeln('Rekening tidak ditemukan!');
+	end else { N=0 }
 		writeln('> Anda tidak mempunyai ',jenis,'.');
 end.
