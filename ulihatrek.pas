@@ -6,7 +6,7 @@ interface
 	uses banktype,sysutils;
 	var
 		i,Neff,pilrek:integer;
-		noak:string;
+		noak,noakun:string;
 	procedure lihatdatarek ();
 		// IS: sudah login, adafungsi login yg hasilin output i
 		// FS: tampilkan info rekening online nasabah dari lnasabah
@@ -94,17 +94,22 @@ implementation
 		end;
 	end;
 	procedure isrekada (jenistab:string);
+	var
+		found:boolean;
 	begin
+		found:=false;
 		for i:=1 to (arrrekonline.Neff) do
 		begin
-				if((arrrekonline.list[i].nonasabah)=jenistab) then
-				begin
-					writeln('> Pilih rekening ',jenistab,' Anda: ');
-					write('> ',arrrekonline.list[i].noakun);
-				end else
-				begin
-					writeln('> Anda tidak mempunyai ',jenistab);
-				end;
+			if((arrrekonline.list[i].jenis)=jenistab) then
+			begin
+				found:=true;
+				writeln('> Pilih rekening ',jenistab,' Anda: ');
+				write('> ',arrrekonline.list[i].noakun);
+			end;
+		end;
+		if(found=false) then
+		begin
+			writeln('> Anda tidak mempunyai ',jenistab);
 		end;
 	end;
 	procedure infosaldo();
@@ -128,9 +133,10 @@ implementation
 			begin
 				isrekada('tabungan mandiri');
 			end;
-		readln(noak);
-		inaktif:=carirekonline(noak);
-		writeln('> Nomor rekening : ',noak);
+		readln(noakun);
+		noak:=noakun;//buat fungsi selanjutnya
+		inaktif:=carirekonline(noakun);
+		writeln('> Nomor rekening : ',noakun);
 		writeln('> Tanggal Mulai : ',arrrekonline.list[inaktif].tglmulai);
 		writeln('> Mata Uang : ',arrrekonline.list[inaktif].uang);
 		writeln('> Jangka Waktu : ',arrrekonline.list[inaktif].waktu);
@@ -205,93 +211,84 @@ implementation
 		tanggal1:=today ('dd-mm-yyyy');
 			for i1:=1 to (arrtransaksi.Neff) do
 			begin
-				if(noak=(arrtransaksi.list[i1].noakun)) then
+				for i2:=1 to (arrtransfer.Neff) do
 				begin
-					tanggal2:=arrtransaksi.list[i1].tgl;
-					for i2:=1 to (arrtransfer.Neff) do
+					for i3:=1 to (arrbayar.Neff) do
 					begin
-						if(noak=(arrtransfer.list[i2].asal)) then
+						for i4:=1 to (arrbeli.Neff) do
 						begin
-							tanggal3:=arrtransfer.list[i2].tgl;
-							for i3:=1 to (arrbayar.Neff) do
+							if(noak=(arrtransaksi.list[i1].noakun)) or (noak=(arrtransfer.list[i2].asal)) or (noak=(arrbayar.list[i3].noakun)) or (noak=(arrbeli.list[i4].noakun)) then
 							begin
-								if(noak=(arrbayar.list[i3].noakun)) then
-								begin
-									tanggal4:=arrbayar.list[i3].tgl;
-									for i4:=1 to (arrbeli.Neff) do
+								tanggal2:=arrtransaksi.list[i1].tgl;
+								tanggal3:=arrtransfer.list[i2].tgl;
+								tanggal4:=arrbayar.list[i3].tgl;
+								tanggal5:=arrbeli.list[i4].tgl;
+								s1:=gettgl(tanggal1);
+								s2:=getbln(tanggal1);
+								s3:=getthn(tanggal1);
+								s4:=gettgl(tanggal2);
+								s5:=getbln(tanggal2);
+								s6:=getthn(tanggal2);
+								s7:=gettgl(tanggal3);
+								s8:=getbln(tanggal3);
+								s9:=getthn(tanggal3);
+								s10:=gettgl(tanggal4);
+								s11:=getbln(tanggal4);
+								s12:=getthn(tanggal4);
+								s13:=gettgl(tanggal5);
+								s14:=getbln(tanggal5);
+								s15:=getthn(tanggal5);
+								selhari1:=(datetoint(s1,s2,s3))-(datetoint(s4,s5,s6));
+								selhari2:=(datetoint(s1,s2,s3))-(datetoint(s7,s8,s9));
+								selhari3:=(datetoint(s1,s2,s3))-(datetoint(s10,s11,s12));
+								selhari4:=(datetoint(s1,s2,s3))-(datetoint(s13,s14,s15));
+									if(selhari1>=1) and(selhari1<=90) then
 									begin
-										if(noak=(arrbeli.list[i4].noakun)) then
-										begin {cek satu-satu no akun itu ada ato tidak di tiap array}
-											tanggal5:=arrbeli.list[i4].tgl;
-											s1:=gettgl(tanggal1);
-											s2:=getbln(tanggal1);
-											s3:=getthn(tanggal1);
-											s4:=gettgl(tanggal2);
-											s5:=getbln(tanggal2);
-											s6:=getthn(tanggal2);
-											s7:=gettgl(tanggal3);
-											s8:=getbln(tanggal3);
-											s9:=getthn(tanggal3);
-											s10:=gettgl(tanggal4);
-											s11:=getbln(tanggal4);
-											s12:=getthn(tanggal4);
-											s13:=gettgl(tanggal5);
-											s14:=getbln(tanggal5);
-											s15:=getthn(tanggal5);
-											selhari1:=(datetoint(s1,s2,s3))-(datetoint(s4,s5,s6));
-											selhari2:=(datetoint(s1,s2,s3))-(datetoint(s7,s8,s9));
-											selhari3:=(datetoint(s1,s2,s3))-(datetoint(s10,s11,s12));
-											selhari4:=(datetoint(s1,s2,s3))-(datetoint(s13,s14,s15));
-												if(selhari1>=1) and(selhari1<=90) then
-												begin
-													writeln('> Histori Transaksi Setoran/Penarikan');
-													writeln('> Tanggal Transaksi : ',arrtransaksi.list[i1].tgl);
-													writeln('> Jenis Transaksi : ',arrtransaksi.list[i1].jenis);
-													writeln('> Mata Uang Yang Digunakan : ',arrtransaksi.list[i1].uang);
-													writeln('> Jumlah Uang : ',arrtransaksi.list[i1].jumlah);
-													writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrtransaksi.list[i1].saldoakhir);
-												end;
-												if(selhari2>=1) and(selhari2<=90) then
-												begin
-													writeln('> Histori Transaksi Transfer Rekening Anda :');
-													writeln('> Tanggal Transaksi Transfer: ',arrtransfer.list[i2].tgl);
-													writeln('> Rekening Asal Transfer : ',arrtransfer.list[i2].asal);
-													writeln('> Rekening Tujuan Transfer : ',arrtransfer.list[i2].tujuan);
-													writeln('> Jenis Transaksi Transfer : ',arrtransfer.list[i2].jenis);
-													writeln('> Nama Bank Luar (Jika Ada) :',arrtransfer.list[i2].bank);
-													writeln('> Mata Uang Yang Digunakan : ',arrtransfer.list[i2].uang);
-													writeln('> Jumlah Uang Yang Ditransfer : ',arrtransfer.list[i2].jumlah);
-													writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrtransfer.list[i2].saldoakhir);
-													
-												end;
-												if(selhari3>=1) and(selhari3<=90) then
-												begin
-													writeln('> Histori Transaksi Pembayaran Anda : ');
-													writeln('> Tanggal Transaksi Pembayaran Anda : ',arrbayar.list[i3].tgl);
-													writeln('> Jenis Transaksi Pembayaran Anda : ',arrbayar.list[i3].jenis);
-													writeln('> Nomor Pembayaran Transaksi Pembayaran Anda : ',arrbayar.list[i3].nomorbayar);
-													writeln('> Mata Uang Yang Digunakan : ',arrbayar.list[i3].uang);
-													writeln('> Jumlah Transaksi Pembayaran Anda : ',arrbayar.list[i3].jumlah);
-													writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrbayar.list[i3].saldoakhir);
-												end;
-												if(selhari4>=1) and(selhari4<=90) then
-												begin
-													writeln('> Histori Transaksi Pembelian Anda : ');
-													writeln('> Tanggal Transaksi Pembelian Anda : ',arrbeli.list[i4].tgl);
-													writeln('> Jenis barang yang Dibeli : ',arrbeli.list[i4].jenis);
-													writeln('> Penyedia Jasa : ',arrbeli.list[i4].penyedia);
-													writeln('> Nomor Tujuan Pembelian Anda : ',arrbeli.list[i4].nomortujuan);
-													writeln('> Mata Uang Yang Digunakan : ',arrbeli.list[i4].uang);
-													writeln('> Jumlah Transaksi Pembelian Anda : ',arrbeli.list[i4].jumlah);
-													writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrbeli.list[i4].saldoakhir);
-												end;
-										end;
+										writeln('> Histori Transaksi Setoran/Penarikan');
+										writeln('> Tanggal Transaksi : ',arrtransaksi.list[i1].tgl);
+										writeln('> Jenis Transaksi : ',arrtransaksi.list[i1].jenis);
+										writeln('> Mata Uang Yang Digunakan : ',arrtransaksi.list[i1].uang);
+										writeln('> Jumlah Uang : ',arrtransaksi.list[i1].jumlah);
+										writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrtransaksi.list[i1].saldoakhir);
 									end;
-								end;
+									if(selhari2>=1) and(selhari2<=90) then
+									begin
+										writeln('> Histori Transaksi Transfer Rekening Anda :');
+										writeln('> Tanggal Transaksi Transfer: ',arrtransfer.list[i2].tgl);
+										writeln('> Rekening Asal Transfer : ',arrtransfer.list[i2].asal);
+										writeln('> Rekening Tujuan Transfer : ',arrtransfer.list[i2].tujuan);
+										writeln('> Jenis Transaksi Transfer : ',arrtransfer.list[i2].jenis);
+										writeln('> Nama Bank Luar (Jika Ada) :',arrtransfer.list[i2].bank);
+										writeln('> Mata Uang Yang Digunakan : ',arrtransfer.list[i2].uang);
+										writeln('> Jumlah Uang Yang Ditransfer : ',arrtransfer.list[i2].jumlah);
+										writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrtransfer.list[i2].saldoakhir);
+										
+									end;
+									if(selhari3>=1) and(selhari3<=90) then
+									begin
+										writeln('> Histori Transaksi Pembayaran Anda : ');
+										writeln('> Tanggal Transaksi Pembayaran Anda : ',arrbayar.list[i3].tgl);
+										writeln('> Jenis Transaksi Pembayaran Anda : ',arrbayar.list[i3].jenis);
+										writeln('> Nomor Pembayaran Transaksi Pembayaran Anda : ',arrbayar.list[i3].nomorbayar);
+										writeln('> Mata Uang Yang Digunakan : ',arrbayar.list[i3].uang);
+										writeln('> Jumlah Transaksi Pembayaran Anda : ',arrbayar.list[i3].jumlah);
+										writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrbayar.list[i3].saldoakhir);
+									end;
+									if(selhari4>=1) and(selhari4<=90) then
+									begin
+										writeln('> Histori Transaksi Pembelian Anda : ');
+										writeln('> Tanggal Transaksi Pembelian Anda : ',arrbeli.list[i4].tgl);
+										writeln('> Jenis barang yang Dibeli : ',arrbeli.list[i4].jenis);
+										writeln('> Penyedia Jasa : ',arrbeli.list[i4].penyedia);
+										writeln('> Nomor Tujuan Pembelian Anda : ',arrbeli.list[i4].nomortujuan);
+										writeln('> Mata Uang Yang Digunakan : ',arrbeli.list[i4].uang);
+										writeln('> Jumlah Transaksi Pembelian Anda : ',arrbeli.list[i4].jumlah);
+										writeln('> Saldo Rekening Anda Setelah Transaksi Ini : ',arrbeli.list[i4].saldoakhir);
+									end;
 							end;
 						end;
 					end;
 				end;
-			end;	
+			end;
 	end;
 end.
