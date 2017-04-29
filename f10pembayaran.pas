@@ -17,18 +17,18 @@
           Neff : integer;
         end;
 	
-	Procedure Pembayaran (Var R : DataRekening; Idx : daftarIndex; var B : DataPembayaran; Tanggal : Array of Word; T: DataNilaiTukar);
+	Procedure Pembayaran (Var lrek :arrrekonline; trans : arrtransaksi ; var DP : arrbayar; Tanggal : Array of Word; T: arrkurs);
 		Var
 			i,j		: Integer;
-			R1 		: T_Rekening;
-			Jen,NoB		: String; 
-			T15 		: Boolean;
-			Jum,JumB	: longint;
+			RE 		: rekonline;
+			pil,ST2		: String; 
+			found 		: Boolean;
+			Jum1,Jum2	: longint;
 			
 		Begin
-			PilihRekening(R,Idx,i);
+			PilihRekening(lrek,trans,i);
 			
-			R1 := R.listRekening[i];
+			RE := R.listRekening[i];
 			If BolehAmbil(R1,Tanggal) then
 				Writeln('Waktu Batas Pengambilan Belum Lewat, Transaksi Gagal')
 			else
@@ -46,18 +46,18 @@
 					write ('Jenis Transaksi Pembayaran : ');
 					readln(J);
 					case j of
-						1 : Jen := 'Listrik';
-						2 : Jen := 'BPJS';
-						3 : Jen := 'PDAM';
-						4 : Jen := 'Telepon';
-						5 : Jen := 'TV Kabel';
-						6 : Jen := 'Kartu Kredit';
-						7 : Jen := 'Pajak';
-						8 : Jen := 'Pendidikan'
+						1 : pil :='Listrik';
+						2 : pil := 'BPJS';
+						3 : pil := 'PDAM';
+						4 : pil := 'Telepon';
+						5 : pil := 'TV Kabel';
+						6 : pil := 'Kartu Kredit';
+						7 : pil := 'Pajak';
+						8 : pil := 'Pendidikan'
 					else
 						Begin
 							Write ('Jenis Transaksi : ');
-							readln(Jen);
+							readln(pil);
 						end;
 					end;
 					write('Nomor Pembayaran : ');
