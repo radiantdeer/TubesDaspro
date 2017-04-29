@@ -41,17 +41,17 @@ begin
 	tanggalMulai:=EncodeDate(yy,mm,dd);
 	case rekonline.waktu of
 		'1 bulan' : begin
-						waktu:=1;
-					end;
+			    	waktu:=1;
+			    end;
 		'3 bulan' : begin
-				 		waktu:=3;
-					end;
+				waktu:=3;
+			    end;
 		'6 bulan' : begin
-						waktu:=6;
-					end;
+				waktu:=6;
+			    end;
 		'1 tahun' : begin
-						waktu:=12;
-					end;
+				waktu:=12;
+			    end;
 	end;
 	jatuhTempo:=tanggalMulai;
 	for i:=1 to waktu do
