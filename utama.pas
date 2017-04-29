@@ -1,7 +1,7 @@
 Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
-uses uload, ulogin, ulihatrek, banktype, uexit, sysutils, crt;
+uses uload, ulogin, ulihatrek, utransaksi, uexit, banktype, sysutils, crt;
 // u<str> : Unit yang memuat fungsi-fungsi yang berkaitan dengan <str> bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
@@ -29,7 +29,7 @@ begin
         'informasisaldo' : infosaldo();
         'lihattransaksi' : lihattransaksi();
         'bukarekening' : writeln('bukarekening launched');
-        'setor' : writeln('setor launched!');
+        'setor' : setoran();
         'tarik' : writeln('tarik launched!');
         'transfer' : writeln('transfer launched!');
         'pembayaran' : writeln('pembayaran launched!');
