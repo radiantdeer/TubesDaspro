@@ -1,0 +1,185 @@
+unit typeStructures;
+{
+	Deklarasi tipe-tipe data yang akan digunkan pada program utama, yaitu :
+	1. Nasabah Bank
+	2. Rekening Online
+	3. Transaksi Setoran/Penarikan
+	4. Transfer Online
+	5. Transaksi Pembayaran Online
+	6. Transaksi Pembelian Online
+	7. Nilai Tukar Antar Mata Uang
+}
+
+interface
+
+uses Dos;
+
+const
+	//Batas atas jumlah nasabah, rekening, dan jumlah setiap transaksi yang bisa disimpan
+	maxNasabah = 1000;
+	maxRekening = 1000;
+	maxTransaksi = 10000;
+	maxIndex = 10000;
+	
+	//Jumlah kombinasi kurs yang mungkin
+	jumlahKurs = 6;
+type
+{
+	Tipe data Nasabah merepresentasikan seorang nasabah dari bank online XYZ
+}
+	T_Nasabah = 	record
+					noNasabah : string;
+					nama : string;
+					alamat : string;
+					kota : string;
+					email : string;
+					telp : string;
+					username : string;
+					password : string;
+					statusAktif : boolean;
+				end;
+	
+{
+	Tipe data Rekening merepresentasikan seorang rekening dari bank online XYZ
+}
+	
+	rekonline = record
+					noAkun : string;
+					noNasabah : string;
+					jenis : string;
+					mataUang : string;
+					saldo : longint;
+					setoran : longint;
+					autoDebet : string;
+					waktu : integer;
+					tanggalMulai : array[1..4] of word;
+				end;
+	
+{
+	Tipe data Transaksi merepresentasikan suatu transaksi setoran/penarikan yang dilakukan pada sebuah rekening
+}
+	T_Transaksi = record
+					noAkun : string;
+					jenis : string;
+					mataUang : string;
+					jumlah : longint;
+					saldoAkhir : longint;
+					tanggal : array[1..4] of word;
+				end;
+				
+{
+	Tipe data Transfer merepresentasikan suatu transaksi transfer online antara dua rekening berbeda
+}
+	T_Transfer = record
+					noAkun : string;
+					tujuan : string;
+					jenis : string;
+					bankLuar : string;
+					mataUang : string;
+					jumlah : longint;
+					saldoAkhir : longint;
+					tanggal : array[1..4] of word;
+				end;
+{
+	Tipe data Pembayaran merepresentasikan transaksi pembayaran yang dilakukan melalui sebuah rekening
+}
+	T_Pembayaran = record
+					noAkun : string;
+					jenis : string;
+					tujuan : string;
+					mataUang : string;
+					jumlah : longint;
+					saldoAkhir : longint;
+					tanggal : array[1..4] of word;
+				end;
+
+{
+	Tipe data Pembelian merepresentasikan pembelian secara online melalui sebuah rekening
+}
+	T_Pembelian = record
+					noAkun : string;
+					jenisBarang : string;
+					penyedia : string;
+					noTujuan : string;
+					mataUang : string;
+					jumlah : longint;
+					saldoAkhir : longint;
+					tanggal : array[1..4] of word;
+				end;
+
+{
+	Tipe data NilaiTukar menyimpan kurs penukaran mata uang antara dua mata uang yang berbeda
+}
+
+	T_NilaiTukar = record
+					nilaiAsal : longint;
+					asal : string;
+					nilaiTujuan : longint;
+					tujuan : string;
+				end;
+	
+{
+	Tipe-tipe data berikut adalah tipe yang digunakan untuk menyimpan data setiap tipe di atas menjadi satu beserta jumlah data berbeda yang disimpan (Neff)
+	
+	Contoh : 	DataNasabah : menyimpan data semua nasabah
+				DataRekening : menyimpan data semua rekening	
+}
+	DataNasabah = record
+					Neff : integer;
+					listNasabah : array[1..maxNasabah] of T_Nasabah;
+				end;
+				
+	DataRekening = record
+						Neff : integer;
+						LiRekening : array[1..nmax] of rekonline;
+					end;
+	
+	DataTransaksi = record
+						Neff : integer;
+						listTransaksi : array[1..maxTransaksi] of T_Transaksi;
+					end;
+	
+	DataTransfer = record
+						Neff : integer;
+						listTransfer : array[1..maxTransaksi] of T_Transfer;
+					end;
+					
+	DataPembayaran = record
+						Neff : integer;
+						lpembayaran : array[1..nmax] of T_Pembayaran;
+					end;
+	
+	DataPembelian = record
+						Neff : integer;
+						listPembelian : array[1..maxTransaksi] of T_Pembelian;
+					end;
+	
+	//Khusus DataNilaiTukar tidak memiliki Neff karena sudah pasti hanya memiliki 6 buah anggota
+	DataNilaiTukar = record
+						listNilaiTukar : array[1..jumlahKurs] of T_NilaiTukar;
+					end;
+
+{
+	Database adalah tipe data yang berisi semua data dari bank XYZ. Tipe ini digunakan untuk mempermudah penyimpanan data
+}
+	Database = record
+					nasabah : DataNasabah;
+					rekening : DataRekening;
+					transaksi : DataTransaksi;
+					transfer : DataTransfer;
+					pembayaran : DataPembayaran;
+					pembelian : DataPembelian;
+					kurs : DataNIlaiTukar;
+				end;
+
+	//Tipe data ini digunakan untuk menyimpan sekumpulan index dari suatu data yang berhubungan
+	//Contoh : Daftar index rekening yang dimiliki satu nasabah yang sama
+	//		   Daftar transaksi yang dilakukan oleh suatu rekening
+	daftarIndex = record
+					index : array[1..nmax] of integer;
+					Neff :integer;
+				end;
+				
+implementation
+begin
+end.
