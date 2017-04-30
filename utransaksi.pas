@@ -471,8 +471,8 @@ implementation
                     arrrekonline.list[i].saldo := arrrekonline.list[i].saldo + jumlahTrf
                   else { mata uang rekening tujuan tidak sama }
                     arrrekonline.list[i].saldo := arrrekonline.list[i].saldo + CurrencyConvert(srccur,jumlahTrf,arrrekonline.list[i].uang);
-                end; { tujuan transfer tidak ditemukan }
-              end;
+                end; { tujuan transfer tidak ditemukan (do nothing) }
+              end; { tujuan transfer bukan satu bank (do nothing) }
             end else { not(success) }
               writeln('> Anda tidak dapat melakukan transfer.');
           end else { not(found) }

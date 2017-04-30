@@ -1,4 +1,4 @@
-2HE297 | BUD389 | deposito | USD | 1950 | 0 | IXY789 | 3 bulan | 25-10-2015
-1XY789 | BUD389 | tabungan mandiri | IDR | 4415000 | 0 | - | - | 28-10-2015
-4ER789 | IRN387 | tabungan rencana | IDR | 1600000 | 500000 | - | 1 tahun | 24-10-2015
+2HE297 | BUD389 | deposito | USD | 1950 | 0 | IXY789 | 3 bulan | 25-10-2015
+1XY789 | BUD389 | tabungan mandiri | IDR | 4350000 | 0 | - | - | 28-10-2015
+4ER789 | IRN387 | tabungan rencana | IDR | 1600000 | 500000 | - | 1 tahun | 24-10-2015
 LEL131 | HUEHUE | tabungan mandiri | IDR | 10000000 | 0 | - | - | 03-02-2017
