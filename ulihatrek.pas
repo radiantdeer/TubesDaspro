@@ -41,7 +41,7 @@ interface
 	procedure lihattransaksi ();
 		//IS: sudah login, asumsi arrrekonline dgn noakun itu selalu true
 		//FS: menampilkan daftar transaksi pengguna
-	
+
 implementation
 
 	procedure lihatdatarek ();
@@ -142,9 +142,9 @@ implementation
 		writeln('Jangka Waktu : ',arrrekonline.list[inaktif].waktu);
 		writeln('Setoran Rutin : ',arrrekonline.list[inaktif].setrutin:0:2);
 		writeln('Saldo : ',arrrekonline.list[inaktif].saldo:0:2);
-		writeln('> ');
+		writeln();
 	end;
-	
+
 	function today (Fmt : string):string;
 
 	Var S : AnsiString;
@@ -153,22 +153,22 @@ implementation
 	  DateTimeToString (S,Fmt,Date);
 	  today:=S;
 	end;
-	
+
 	function gettgl (var S:string):string;
 	begin
 		gettgl:=copy (S,1,2);
 	end;
-	
+
 	function getbln (var S:string):string;
 	begin
 		getbln:=copy (S,4,2);
 	end;
-	
+
 	function getthn (var S:string):string;
 	begin
 		getthn:=copy (S,7,4);
 	end;
-	
+
 	function isKabisat(yy:integer):boolean;
 	begin
 		isKabisat:= ((yy mod 4) = 0) and (((yy mod 100) <>0) or ((yy mod 400) = 0));
@@ -224,7 +224,7 @@ implementation
 						s4:=gettgl(tanggal2);
 						s5:=getbln(tanggal2);
 						s6:=getthn(tanggal2);
-						selhari1:=(datetoint(s1,s2,s3))-(datetoint(s4,s5,s6));				
+						selhari1:=(datetoint(s1,s2,s3))-(datetoint(s4,s5,s6));
 							if(selhari1>=1) and(selhari1<=90) then
 							begin
 								writeln('Histori Transaksi Setoran/Penarikan Anda ');
@@ -233,7 +233,7 @@ implementation
 								writeln('Mata Uang Yang Digunakan : ',arrtransaksi.list[i1].uang);
 								writeln('Jumlah Uang : ',arrtransaksi.list[i1].jumlah:0:2);
 								writeln('Saldo Rekening Anda Setelah Transaksi Ini : ',arrtransaksi.list[i1].saldoakhir:0:2);
-							end;	
+							end;
 					end;
 				end;
 
@@ -292,7 +292,7 @@ implementation
 								writeln('Mata Uang Yang Digunakan : ',arrbayar.list[i3].uang);
 								writeln('Jumlah Transaksi Pembayaran Anda : ',arrbayar.list[i3].jumlah:0:2);
 								writeln('Saldo Rekening Anda Setelah Transaksi Ini : ',arrbayar.list[i3].saldoakhir:0:2);
-							end;					
+							end;
 					end;
 				end;
 
@@ -322,7 +322,7 @@ implementation
 								writeln('Mata Uang Yang Digunakan : ',arrbeli.list[i4].uang);
 								writeln('Jumlah Transaksi Pembelian Anda : ',arrbeli.list[i4].jumlah:0:2);
 								writeln('Saldo Rekening Anda Setelah Transaksi Ini : ',arrbeli.list[i4].saldoakhir:0:2);
-							end;					
+							end;
 					end;
 				end;
 

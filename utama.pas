@@ -30,7 +30,7 @@ begin
         'lihattransaksi' : lihattransaksi();
         'bukarekening' : writeln('bukarekening launched');
         'setor' : setoran();
-        'tarik' : writeln('tarik launched!');
+        'tarik' : penarikan();
         'transfer' : writeln('transfer launched!');
         'pembayaran' : writeln('pembayaran launched!');
         'pembelian' : writeln('pembelian launched!');
