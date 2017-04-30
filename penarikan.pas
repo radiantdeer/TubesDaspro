@@ -25,11 +25,9 @@ function SudahJatuhTempo (rekonline : rekonline) : boolean;
 { Kamus }
 var
 	tanggalMulai, jatuhTempo : TDateTime;
-	waktu : integer;
 	cmd : integer;
 	date, month, year : string;
 	dd, mm, yy : integer;
-	i : integer; { Iterasi }
 { Algoritma }
 begin
 	date:=copy(rekonline.tglmulai,1,2);
@@ -41,22 +39,17 @@ begin
 	tanggalMulai:=EncodeDate(yy,mm,dd);
 	case rekonline.waktu of
 		'1 bulan' : begin
-			    	waktu:=1;
-			    end;
+						jatuhTempo:=IncMonth(tanggalMulai,1);
+					end;
 		'3 bulan' : begin
-				waktu:=3;
-			    end;
+						jatuhTempo:=IncMonth(tanggalMulai,3);
+					end;
 		'6 bulan' : begin
-				waktu:=6;
-			    end;
+						jatuhTempo:=IncMonth(tanggalMulai,6);
+					end;
 		'1 tahun' : begin
-				waktu:=12;
-			    end;
-	end;
-	jatuhTempo:=tanggalMulai;
-	for i:=1 to waktu do
-	begin
-		jatuhTempo:=IncMonth(jatuhTempo,1);
+						jatuhTempo:=IncMonth(tanggalMulai,12);
+					end;
 	end;
 	cmd:=CompareDate(jatuhTempo,Now);
 	SudahJatuhTempo:=cmd<=0;
