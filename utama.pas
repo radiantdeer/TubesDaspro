@@ -58,14 +58,19 @@ begin
                     else
                       writeln('Data rekening kosong atau user belum login!');
                   end;
-        'transfer' : writeln('transfer launched!');
+        'transfer' : begin
+                      if (isCmdExecutable() and not(loadedFile[7] = '')) then
+                        transfer()
+                      else 
+                        writeln('Data pendukung tidak memadai atau user belum login!');
+                     end;
         'pembayaran' : writeln('pembayaran launched!');
         'pembelian' : writeln('pembelian launched!');
         'tutuprekening' : writeln('tutuprekening launched!');
         'editnasabah' : writeln('editnasabah launched!');
         'tambahautodebet' : writeln('tambahautodebet launched!');
         'man' : writeln('man launched!'); // Gak ada di spek, nanti kalo udah kelar semua baru bikin manual (gampang sih ini sebenarnya...)
-        'clear' : clrscr();
+        'clear' : clrscr(); // Untuk membersihkan tampilan
         else writeln('Error : Perintah ',cmd,' tidak terdefinisi!');
       end;
     end;
