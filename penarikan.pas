@@ -162,7 +162,7 @@ begin
 			end else { not(success) }
 				writeln('> Anda tidak dapat melakukan penarikan.');
 		end else { not(found) }
-			writeln('Rekening tidak ditemukan!');
+			writeln('> Rekening tidak ditemukan!');
 	end else { N=0 }
 		writeln('> Anda tidak mempunyai ',jenis,'.');
 end.
