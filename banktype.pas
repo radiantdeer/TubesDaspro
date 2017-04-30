@@ -161,6 +161,27 @@ var
   loadedFile : array[1..8] of string;
    // Variabel menampung user yang sedang login sekarang
   currentuser : nasabah;
+
 implementation
 
+// Inisialisasi berbagai variabel
+initialization
+begin
+  arrnasabah.Neff := 0;
+  arrrekonline.Neff := 0;
+  arrtransaksi.Neff := 0;
+  arrtransfer.Neff := 0;
+  arrbayar.Neff := 0;
+  arrbeli.Neff := 0;
+  arrkurs.Neff := 0;
+  arrbarang.Neff := 0;
+
+  for i := 1 to 8 do
+  begin
+    loadedFile[i] := '';
+  end;
+  currentuser.nonasabah := '';
+  attempt := 3;
+
+end;
 end.

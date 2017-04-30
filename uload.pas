@@ -48,34 +48,42 @@ procedure load();
         1 : begin
               loadallnasabah(ft, arrnasabah); // Pemanggilan subprogram yang sesuai
               loadedFile[1] := fname; // Marker bahwa data suatu file telah dimuat ke dalam array
+              writeln(arrnasabah.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         2 : begin
               loadallrekonline(ft, arrrekonline);
               loadedFile[2] := fname;
+              writeln(arrrekonline.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         3 : begin
               loadalltransaksi(ft, arrtransaksi);
               loadedFile[3] := fname;
+              writeln(arrtransaksi.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         4 : begin
               loadalltransfer(ft, arrtransfer);
               loadedFile[4] := fname;
+              writeln(arrtransfer.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         5 : begin
               loadallbayar(ft, arrbayar);
               loadedFile[5] := fname;
+              writeln(arrbayar.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         6 : begin
               loadallbeli(ft, arrbeli);
               loadedFile[6] := fname;
+              writeln(arrbeli.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         7 : begin
               loadallkurs(ft, arrkurs);
               loadedFile[7] := fname;
+              writeln(arrkurs.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         8 : begin
               loadallbarang(ft, arrbarang);
               loadedFile[8] := fname;
+              writeln(arrbarang.Neff,' data ditemukan dan telah dimuat dalam memori.');
             end;
         0 : writeln('Batal load file.');
         end;
