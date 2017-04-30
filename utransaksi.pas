@@ -115,7 +115,7 @@ implementation
       			arrtransaksi.list[arrtransaksi.Neff].tgl:=FormatDateTime('DD-MM-YYYY',Now);
       			writeln('> Setoran berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo:0:2);
       		end else { not(found) }
-      			writeln('Rekening tidak ditemukan!');
+      			writeln('> Rekening tidak ditemukan!');
       	end else { N=0 }
       		writeln('> Anda tidak mempunyai ',jenis,'.');
       end;
