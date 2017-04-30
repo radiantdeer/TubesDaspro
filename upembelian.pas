@@ -20,10 +20,11 @@ function SudahJatuhTempo (rekonline : rekonline;jenis : string) : boolean;
 
 { Kamus Lokal }
 var
-	tanggalMulai, jatuhTempo : TDateTime;
-	cmd : integer;
-	date, month, year : string;
-	dd, mm, yy : integer;
+	tanggalMulai, jatuhTempo 	: TDateTime;
+	cmd 						: integer;
+	date, month, year 			: string;
+	dd, mm, yy 					: integer;
+	
 { Algoritma }
 begin
 	date:=copy(rekonline.tglmulai,1,2);		//Menyalin tanggal dari array rekonline
@@ -76,9 +77,9 @@ function gantikurs (awal : string; akhir : string;saldo : real) : real;
 
 {Kamus Lokal}
 var
-	found : boolean;
-	temp : real;
-	i : integer;
+	found 	: boolean;
+	temp 	: real;
+	i 		: integer;
 	
 {Algoritma Fungsi}
 begin
@@ -95,29 +96,6 @@ begin
 	end;
 	gantikurs := temp;
 end;
-
-function isUserExists(nonasabah : string; T : lnasabah) : integer;
-{Mengembalikan indeks array yang berisi nasabah yang dimaksud}
-
-{Kamus Lokal}
-var
-	i : integer;
-	found : boolean;
-
-{Algoritma Fungsi}
-begin
-    // Inisialisasi Variabel
-    i := 1;
-    found := false;
-    while((i <= T.Neff) AND NOT(found)) do // Bagian pencarian user
-    begin
-		if (T.list[i].nonasabah = nonasabah) then found := true
-		else i := i + 1;
-    end;
-    if (found) then isUserExists := i // User ditemukan
-    else isUserExists := 0; // User tidak ditemukan
-  end;
-
 
 procedure beli(harga : real;arr : integer;nomor : string);
 {Prosedur untuk membeli sesuatu dan mengurangkan saldo dengan harga barang}
@@ -140,14 +118,13 @@ begin
 	writeln('> 1. Deposito');
 	writeln('> 2. Tabungan rencana');
 	writeln('> 3. Tabungan mandiri');
-	{ Validasi masukan jenis rekening }
-	{ Pengulangan akan berhenti jika pengguna memasukkan jenis rekening 
-	  yang tepat, yaitu 1, 2, atau 3 }
+	//Validasi masukan jenis rekening 
+	//Pengulangan akan berhenti jika pengguna memasukkan jenis rekening yang tepat, yaitu 1, 2, atau 3
 	stop:=false;
 	repeat
 		write('> Jenis rekening : ');
 		readln(jenisRek);
-		if (jenisRek>= 1) and (jensRek <=3) then
+		if (jenisRek>= 1) and (jenisRek <=3) then
 		begin
 			stop:=true;
 		end else
@@ -155,10 +132,9 @@ begin
 			writeln('> Jenis rekening yang Anda masukkan salah!');
 		end;
 	until stop;
-	{ Mendaftarkan nomor akun rekening-rekening milik pengguna ke array 
-	  tempArray sesuai dengan masukan jenis rekening }
-	{ N adalah banyaknya rekening milik pengguna dengan jenis tertentu
-	  sesuai masukan pengguna }
+	
+	//Mendaftarkan nomor akun rekening-rekening milik pengguna ke array tempArray sesuai dengan masukan jenis rekening 
+	//N adalah banyaknya rekening milik pengguna dengan jenis tertentu sesuai masukan pengguna
 	if (jenisRek=1) then
 	begin
 		jenis:='deposito';
@@ -227,7 +203,7 @@ begin
 			begin
 				arrrekonline.list[i].saldo:=gantikurs('IDR',arrrekonline.list[i].uang,(arrrekonline.list[i].saldo-ganti));
 				success:=true;
-			end else if (jenis='deposito') or (jenis='tabungan rencana') and (arrrekonline.list[i].saldo>=harga) and SudahJatuhTempo(arrrekonline.list[i],jenis) then 
+			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i],jenis)) then 
 			begin
 				arrrekonline.list[i].saldo:=gantikurs('IDR',arrrekonline.list[i].uang,(arrrekonline.list[i].saldo-ganti));
 				success:=true;
@@ -239,7 +215,7 @@ begin
 			begin
 				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 				success:=true;
-			end else if (jenis='deposito') or (jenis='tabungan rencana') and (arrrekonline.list[i].saldo>=harga) and SudahJatuhTempo(arrrekonline.list[i],jenis) then //Ubah di sini
+			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i],jenis)) then 
 			begin
 				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 				success:=true;
@@ -251,13 +227,13 @@ begin
 				listpembelian.Neff:=arrrekonline.Neff+1;
 				listpembelian.list[listpembelian.Neff].noakun:=arrrekonline.list[i].noakun;
 				listpembelian.list[listpembelian.Neff].jenis:=listbrg.list[arr].jenis;
-				listpembelian.list[listpembelian.Neff].penyedia:=listbrg.list[arr].jenis;;
+				listpembelian.list[listpembelian.Neff].penyedia:=listbrg.list[arr].penyedia;
 				listpembelian.list[listpembelian.Neff].nomortujuan:=nomor;
 				listpembelian.list[listpembelian.Neff].uang:=arrrekonline.list[i].uang;
 				listpembelian.list[listpembelian.Neff].jumlah:=harga;
 				listpembelian.list[listpembelian.Neff].saldoakhir:= arrrekonline.list[i].saldo;
 				listpembelian.list[listpembelian.Neff].tgl:=FormatDateTime('DD-MM-YYYY',Now);
-				writeln('> Pembelian Berhasil ! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo);
+				writeln('> Pembelian Berhasil ! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo:0:0);
 			end else
 			begin
 				writeln('> Anda tidak dapat melakukan pembelian.')
@@ -269,14 +245,18 @@ begin
 end;
 
 procedure menu;
+{Prosedur menampilkan main menu pembelian}
+
+{Kamus Lokal}
 var
 	i : integer;
 	nomor : string;
-	
+
+{Algoritma Prosedur}
 begin
 	for i := 1 to listbrg.neff do
 		begin
-			writeln('> ',i,'. ',listbrg.list[i].jenis, ' | ',listbrg.list[i].penyedia, ' | ',listbrg.list[i].harga:0:0);
+			writeln('> ',i,'. ',listbrg.list[i].jenis, ' | ',listbrg.list[i].penyedia, ' | ',listbrg.list[i].harga:0:0);     //Menampilkan barang yang tersedia
 		end;
 		repeat
 			writeln('> Masukkan pilihan anda : ');
