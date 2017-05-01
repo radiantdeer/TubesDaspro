@@ -65,7 +65,12 @@ begin
                         writeln('Data pendukung tidak memadai atau user belum login!');
                      end;
         'pembayaran' : writeln('pembayaran launched!');
-        'pembelian' : writeln('pembelian launched!');
+        'pembelian' : begin
+                        if (isCmdExecutable() and not(loadedFile[7] = '') and not(loadedFile[8] = '')) then
+                          menu_pembelian()
+                        else
+                          writeln('Data pendukung tidak memadai atau user belum login!');
+                      end;
         'tutuprekening' : writeln('tutuprekening launched!');
         'editnasabah' : writeln('editnasabah launched!');
         'tambahautodebet' : writeln('tambahautodebet launched!');
