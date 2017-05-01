@@ -13,9 +13,9 @@ interface
       jenisRek : integer;
       jenis, noAk, notujuan, banktujuan, trfremarks, srccur : string;
       jumlahSetor, jumlahTarik, jumlahTrf : real;
-      stop, found, success : boolean;
+      stop, found, found1, found2, success : boolean;
       N : integer;
-      i : integer;
+      i, j : integer;
 
   // List Subprogram yang tersedia di unit ini
   function SudahJatuhTempo (rekonline : rekonline) : boolean;
@@ -127,7 +127,7 @@ implementation
         CurrencyConvert := -999;
     end;
    
-  procedure PilihJenisRekening();
+  procedure PilihJenisRekening(var jenisRek : integer);
   var
 		stop : boolean;
   begin
@@ -149,7 +149,7 @@ implementation
     	until stop;
   end;
   
-  procedure IsiTempArray();
+  procedure IsiTempArray(var tempArray : TabString; var jenis : string; var N : integer; jenisRek : integer);
   begin
 		if (jenisRek=1) then
     	begin
@@ -190,7 +190,7 @@ implementation
     	end;
     end;
   
-  procedure TampilIsiTempArray();
+  procedure TampilIsiTempArray(tempArray : TabString; N : integer);
   begin
 		writeln('> Pilih rekening ',jenis,' Anda:');
     	for i:=1 to N do
@@ -210,35 +210,40 @@ implementation
 			write('> Rekening: ');
 			readln(noAk);
 			{ Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
-			found:=false;
+			found1:=false;
 			i:=1;
-			while (i<=N) and (not(found)) do
+			while (i<=N) and (not(found1)) do
 			begin
-				if (tempArray[i].noakun=noAk) then
-					found:=true
+				if (tempArray[i]=noAk) then
+					found1:=true
 				else
 					i:=i+1;
 			end;
-    		if found then
+    		if found1 then
     		begin
 				{ Pencarian indeks nomor akun rekening pada arrrekonline }
 				found2:=false;
 				j:=1;
-				while not(found) do
+				while not(found2) do
 				begin
-					if (arrrekonline.list[j].noakun=ds
+					if (arrrekonline.list[j].noakun=noAk) then
+						found2:=true
+					else
+						j:=j+1;
+				end;
     			write('> Jumlah setoran: ');
     			readln(jumlahSetor);
-    			arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo+jumlahSetor;
+    			{ Update besar saldo }
+    			arrrekonline.list[j].saldo:=arrrekonline.list[j].saldo+jumlahSetor;
     			{ Update array transaksi setoran/penarikan }
     			arrtransaksi.Neff:=arrtransaksi.Neff+1;
-    			arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[i].noakun;
+    			arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[j].noakun;
     			arrtransaksi.list[arrtransaksi.Neff].jenis:='setoran';
-    			arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[i].uang;
+    			arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[j].uang;
     			arrtransaksi.list[arrtransaksi.Neff].jumlah:=jumlahSetor;
-    			arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[i].saldo;
+    			arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[j].saldo;
     			arrtransaksi.list[arrtransaksi.Neff].tgl:=FormatDateTime('DD-MM-YYYY',Now);
-    			writeln('> Setoran berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo:0:2);
+    			writeln('> Setoran berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[j].saldo:0:2);
     		end else { not(found) }
     			writeln('> Rekening tidak ditemukan!');
     	end else { N=0 }
@@ -254,40 +259,51 @@ implementation
     	begin
     		TampilIsiTempArray(tempArray,N);
     		write('> Rekening: ');
-    		readln(noAk);
-    		found:=false;
-    		i:=1;
-    		while (i<=arrrekonline.Neff) and (not(found)) do
+			readln(noAk);
+			{ Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
+			found1:=false;
+			i:=1;
+			while (i<=N) and (not(found1)) do
+			begin
+				if (tempArray[i]=noAk) then
+					found1:=true
+				else
+					i:=i+1;
+			end;
+    		if found1 then
     		begin
-    			if (arrrekonline.list[i].noakun=noAk) then
-    				found:=true
-    			else
-    				i:=i+1;
-    		end;
-    		if found then
-    		begin
+				{ Pencarian indeks nomor akun rekening pada arrrekonline }
+				found2:=false;
+				j:=1;
+				while not(found2) do
+				begin
+					if (arrrekonline.list[j].noakun=noAk) then
+						found2:=true
+					else
+						j:=j+1;
+				end;
     			write('> Masukkan jumlah uang yang diinginkan : ');
     			readln(jumlahTarik);
-    			if (jenis='tabungan mandiri') and (arrrekonline.list[i].saldo>=jumlahTarik) then
+    			if (jenis='tabungan mandiri') and (arrrekonline.list[j].saldo>=jumlahTarik) then
     			begin
-    				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-jumlahTarik;
+    				arrrekonline.list[j].saldo:=arrrekonline.list[j].saldo-jumlahTarik;
     				success:=true;
-    			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=jumlahTarik) and SudahJatuhTempo(arrrekonline.list[i]) then
+    			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[j].saldo>=jumlahTarik) and SudahJatuhTempo(arrrekonline.list[j]) then
     			begin
-    				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-jumlahTarik;
+    				arrrekonline.list[j].saldo:=arrrekonline.list[j].saldo-jumlahTarik;
     				success:=true;
     			end else
     				success:=false;
     			if (success=true) then
     			begin
     				arrtransaksi.Neff:=arrtransaksi.Neff+1;
-    				arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[i].noakun;
+    				arrtransaksi.list[arrtransaksi.Neff].noakun:=arrrekonline.list[j].noakun;
     				arrtransaksi.list[arrtransaksi.Neff].jenis:='penarikan';
-    				arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[i].uang;
+    				arrtransaksi.list[arrtransaksi.Neff].uang:=arrrekonline.list[j].uang;
     				arrtransaksi.list[arrtransaksi.Neff].jumlah:=jumlahTarik;
-    				arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[i].saldo;
+    				arrtransaksi.list[arrtransaksi.Neff].saldoakhir:=arrrekonline.list[j].saldo;
     				arrtransaksi.list[arrtransaksi.Neff].tgl:=FormatDateTime('DD-MM-YYYY',Now);
-    				writeln('> Penarikan berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[i].saldo:0:2);
+    				writeln('> Penarikan berhasil! Jumlah saldo Anda adalah ',arrrekonline.list[j].saldo:0:2);
     			end else { not(success) }
     				writeln('> Anda tidak dapat melakukan penarikan.');
     		end else { not(found) }
