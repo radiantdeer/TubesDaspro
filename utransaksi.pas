@@ -315,86 +315,35 @@ implementation
   procedure transfer();
 
     begin
-      writeln('> Pilih jenis rekening:');
-      writeln('> 1. Deposito');
-      writeln('> 2. Tabungan rencana');
-      writeln('> 3. Tabungan mandiri');
-      { Validasi masukan jenis rekening }
-      { Pengulangan akan berhenti jika pengguna memasukkan jenis rekening
-        yang tepat, yaitu 1, 2, atau 3 }
-      stop:=false;
-      repeat
-        write('> Jenis rekening : ');
-        readln(jenisRek);
-        if (jenisRek=1) or (jenisRek=2) or (jenisRek=3) then
-          stop:=true
-        else
-          writeln('> Jenis rekening yang Anda masukkan salah!');
-      until stop;
-      { Mendaftarkan nomor akun rekening-rekening milik pengguna ke array
-        tempArray sesuai dengan masukan jenis rekening }
-      { N adalah banyaknya rekening milik pengguna dengan jenis tertentu
-        sesuai masukan pengguna }
-      if (jenisRek=1) then
-      begin
-        jenis:='deposito';
-        N:=0;
-        for i:=1 to arrrekonline.Neff do
-        begin
-          if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-          begin
-            N:=N+1;
-            tempArray[N]:=arrrekonline.list[i].noakun;
-          end;
-        end;
-      end else if (jenisRek=2) then
-      begin
-        jenis:='tabungan rencana';
-        N:=0;
-        for i:=1 to arrrekonline.Neff do
-        begin
-          if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-          begin
-            N:=N+1;
-            tempArray[N]:=arrrekonline.list[i].noakun;
-          end;
-        end;
-      end else
-      begin
-        jenis:='tabungan mandiri';
-        N:=0;
-        for i:=1 to arrrekonline.Neff do
-        begin
-          if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-          begin
-            N:=N+1;
-            tempArray[N]:=arrrekonline.list[i].noakun;
-          end;
-        end;
-      end;
+	  PilihJenisRekening(jenisRek);
+      IsiTempArray(tempArray,jenis,N,jenisRek);
       if (N>0) then
       begin
-        { Menampilkan nomor akun rekening-rekening yang tersimpan pada
-          array tempArray }
-        writeln('> Pilih rekening ',jenis,' Anda:');
-        for i:=1 to N do
-        begin
-          writeln('> ',i,'. ',tempArray[i]);
-        end;
+        TampilIsiTempArray(tempArray,N);
         write('> Rekening : ');
         readln(noAk);
-        { Asumsikan nomor akun yang dimasukkan pengguna benar }
-        found:=false;
-        i:=1;
-        while (i<=arrrekonline.Neff) and (not(found)) do
+        { Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
+		found1:=false;
+		i:=1;
+		while (i<=N) and (not(found1)) do
+		begin
+			if (tempArray[i]=noAk) then
+				found1:=true
+			else
+				i:=i+1;
+		end;
+        if found1 then
         begin
-          if (arrrekonline.list[i].noakun=noAk) then
-            found:=true
-          else
-            i:=i+1;
-        end;
-        if found then
-        begin
+          { Pencarian indeks nomor akun rekening pada arrrekonline }
+		  found2:=false;
+		  i:=1;
+		  while not(found2) do
+		  begin
+				if (arrrekonline.list[i].noakun=noAk) then
+					found2:=true
+				else
+					i:=i+1;
+		  end;
           write('> Masukkan rekening tujuan : ');readln(notujuan);
           repeat
             write('> Apakah rekening tersebut merupakan rekening bank XYZ? (y/n) : ');readln(pil);
@@ -497,131 +446,77 @@ implementation
 
   {Algoritma Prosedur}
   begin
-    writeln('> Pilih jenis rekening');
-    writeln('> 1. Deposito');
-    writeln('> 2. Tabungan rencana');
-    writeln('> 3. Tabungan mandiri');
-    //Validasi masukan jenis rekening 
-    //Pengulangan akan berhenti jika pengguna memasukkan jenis rekening yang tepat, yaitu 1, 2, atau 3
-    stop:=false;
-    repeat
-      write('> Jenis rekening : ');
-      readln(jenisRek);
-      if (jenisRek>= 1) and (jenisRek <=3) then
-      begin
-        stop:=true;
-      end else
-      begin
-        writeln('> Jenis rekening yang Anda masukkan salah!');
-      end;
-    until stop;
-    
-    //Mendaftarkan nomor akun rekening-rekening milik pengguna ke array tempArray sesuai dengan masukan jenis rekening 
-    //N adalah banyaknya rekening milik pengguna dengan jenis tertentu sesuai masukan pengguna
-    if (jenisRek=1) then
-    begin
-      jenis:='deposito';
-      N:=0;
-      for i:=1 to arrrekonline.Neff do
-      begin
-        if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-        begin
-          N:=N+1;
-          tempArray[N]:=arrrekonline.list[i].noakun;
-        end;
-      end;
-    end else if (jenisRek=2) then
-    begin
-      jenis:='tabungan rencana';
-      N:=0;
-      for i:=1 to arrrekonline.Neff do
-      begin
-        if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-        begin
-          N:=N+1;
-          tempArray[N]:=arrrekonline.list[i].noakun;
-        end;
-      end;
-    end else
-    begin
-      jenis:='tabungan mandiri';
-      N:=0;
-      for i:=1 to arrrekonline.Neff do
-      begin
-        if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-        begin
-          N:=N+1;
-          tempArray[N]:=arrrekonline.list[i].noakun;
-        end;
-      end;
-    end;
-    
+    PilihJenisRekening(jenisRek);
+    IsiTempArray(tempArray,jenis,N,jenisRek);
     if (N>0) then
     begin
-      writeln('> Pilih rekening ',jenis,' Anda:');
-      for i:=1 to N do
-      begin
-        writeln('> ',i,'. ',tempArray[i]);
-      end;
+      TampilIsiTempArray(tempArray,N);
       write('> Rekening: ');
       readln(noAk);
-      { Asumsikan nomor akun yang dimasukkan pengguna benar }
-      found:=false;
-      i:=1;
-      while (i<=arrrekonline.Neff) and (not(found)) do
-      begin
-        if (arrrekonline.list[i].noakun=noAk) then
-        begin
-          found:=true;
-        end else
-        begin
-          i:=i+1;
-        end;
-      end;  
-      
-      if (arrrekonline.list[i].uang <> 'IDR') then
-      begin
-        ganti := CurrencyConvert(arrrekonline.list[i].uang,arrrekonline.list[i].saldo,'IDR');
-        if (jenis='tabungan mandiri') and (arrrekonline.list[i].saldo>=ganti) then
-        begin
-          arrrekonline.list[i].saldo:=CurrencyConvert('IDR',(arrrekonline.list[i].saldo-ganti),arrrekonline.list[i].uang);
-          success:=true;
-        end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
-        begin
-          arrrekonline.list[i].saldo:=CurrencyConvert('IDR',(arrrekonline.list[i].saldo-ganti), arrrekonline.list[i].uang);
-          success:=true;
-        end else
-          success:=false;
-      end else
-      begin
-        if (jenis='tabungan mandiri') and (arrrekonline.list[i].saldo>=harga) then
-        begin
-          arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
-          success:=true;
-        end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
-        begin
-          arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
-          success:=true;
-        end else
-          success:=false;
-      end;
-        if (success=true) then
-        begin
-          arrbeli.Neff:=arrbeli.Neff+1;
-          arrbeli.list[arrbeli.Neff].noakun:=arrrekonline.list[i].noakun;
-          arrbeli.list[arrbeli.Neff].jenis:=arrbarang.list[arr].jenis;
-          arrbeli.list[arrbeli.Neff].penyedia:=arrbarang.list[arr].penyedia;
-          arrbeli.list[arrbeli.Neff].nomortujuan:=nomor;
-          arrbeli.list[arrbeli.Neff].uang:=arrrekonline.list[i].uang;
-          arrbeli.list[arrbeli.Neff].jumlah:=harga;
-          arrbeli.list[arrbeli.Neff].saldoakhir:= arrrekonline.list[i].saldo;
-          arrbeli.list[arrbeli.Neff].tgl:=FormatDateTime('DD-MM-YYYY',Now);
-          writeln('> Pembelian Berhasil ! Saldo Anda sekarang adalah ',arrrekonline.list[i].saldo:0:0);
-        end else
-        begin
-          writeln('> Anda tidak dapat melakukan pembelian.')
-        end;
-    end else
+      { Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
+	  found1:=false;
+	  i:=1;
+	  while (i<=N) and (not(found1)) do
+	  begin
+		 if (tempArray[i]=noAk) then
+			  found1:=true
+		 else
+			  i:=i+1;
+	  end;
+	  if found1 then
+	  begin
+		  { Pencarian indeks nomor akun rekening pada arrrekonline }
+		  found2:=false;
+		  i:=1;
+		  while not(found2) do
+		  begin
+				if (arrrekonline.list[i].noakun=noAk) then
+					found2:=true
+				else
+					i:=i+1;
+		  end;
+          if (arrrekonline.list[i].uang <> 'IDR') then
+          begin
+			  ganti := CurrencyConvert(arrrekonline.list[i].uang,arrrekonline.list[i].saldo,'IDR');
+			  if (jenis='tabungan mandiri') and (arrrekonline.list[i].saldo>=ganti) then
+              begin
+					arrrekonline.list[i].saldo:=CurrencyConvert('IDR',(arrrekonline.list[i].saldo-ganti),arrrekonline.list[i].uang);
+					success:=true;
+			  end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
+			  begin
+					arrrekonline.list[i].saldo:=CurrencyConvert('IDR',(arrrekonline.list[i].saldo-ganti), arrrekonline.list[i].uang);
+					success:=true;
+			  end else
+					success:=false;
+		  end else if (jenis='tabungan mandiri') and (arrrekonline.list[i].saldo>=harga) then
+          begin
+			  arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
+			  success:=true;
+          end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
+          begin
+			  arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
+			  success:=true;
+		  end else
+			  success:=false;
+          if (success=true) then
+          begin
+			  arrbeli.Neff:=arrbeli.Neff+1;
+              arrbeli.list[arrbeli.Neff].noakun:=arrrekonline.list[i].noakun;
+              arrbeli.list[arrbeli.Neff].jenis:=arrbarang.list[arr].jenis;
+              arrbeli.list[arrbeli.Neff].penyedia:=arrbarang.list[arr].penyedia;
+              arrbeli.list[arrbeli.Neff].nomortujuan:=nomor;
+              arrbeli.list[arrbeli.Neff].uang:=arrrekonline.list[i].uang;
+              arrbeli.list[arrbeli.Neff].jumlah:=harga;
+              arrbeli.list[arrbeli.Neff].saldoakhir:= arrrekonline.list[i].saldo;
+              arrbeli.list[arrbeli.Neff].tgl:=FormatDateTime('DD-MM-YYYY',Now);
+              writeln('> Pembelian Berhasil ! Saldo Anda sekarang adalah ',arrrekonline.list[i].saldo:0:0);
+          end else
+          begin
+              writeln('> Anda tidak dapat melakukan pembelian.')
+          end;
+      end else { not(found1) }
+          writeln('> Rekening tidak ditemukan!');
+    end else { N=0 }
     begin
       writeln('> Anda tidak mempunyai ',jenis,'.');
     end;
