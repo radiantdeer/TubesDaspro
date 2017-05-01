@@ -2,7 +2,7 @@ unit utransaksi;
 { Berisi fungsi-fungsi transaksi (setoran, penarikan, transfer, pembelian, pembayaran) }
 
 interface
-  uses banktype, sysutils, dateutils;
+  uses banktype, utampilanpengguna, sysutils, dateutils;
   
   type
 	  TabString = array [1..50] of string;
@@ -13,7 +13,7 @@ interface
       jenisRek : integer;
       jenis, noAk, notujuan, banktujuan, trfremarks, srccur : string;
       jumlahSetor, jumlahTarik, jumlahTrf : real;
-      stop, found, found1, found2, success : boolean;
+      stop, found, success : boolean;
       N : integer;
       i, j : integer;
 
@@ -28,18 +28,6 @@ interface
   { Mengubah nominal yang dalam mata uang asal menjadi mata uang tujuan, nominal dianggap positif
     Menggunakan data dalam array lkurs, jika data tidak ditemukan, fungsi mengembalikan -999 }
     
-  procedure PilihJenisRekening (var jenisRek : integer);
-  { Menampilkan jenis-jenis rekening yang dapat dipilih pengguna }
-  { Menerima masukan jenis rekening dari pengguna }
-  
-  procedure IsiTempArray (var tempArray : TabString; var jenis : string; var N : integer; jenisRek : integer);
-  { Mendaftarkan nomor akun rekening-rekening milik pengguna ke array 
-    tempArray sesuai dengan masukan jenis rekening pada procedure PilihJenisRekening }
-  { N adalah banyaknya rekening milik pengguna dengan jenis tertentu sesuai masukan pengguna }
-  
-  procedure TampilIsiTempArray (tempArray : TabString; N : integer);
-  { Menampilkan nomor akun rekening-rekening yang tersimpan pada array tempArray }
-  
   procedure setoran();
   { Menyetor sejumlah uang secara tunai ke suatu rekening tertentu }
   
@@ -126,78 +114,6 @@ implementation
       else 
         CurrencyConvert := -999;
     end;
-   
-  procedure PilihJenisRekening(var jenisRek : integer);
-  var
-		stop : boolean;
-  begin
-		writeln('> Pilih jenis rekening:');
-    	writeln('> 1. Deposito');
-    	writeln('> 2. Tabungan rencana');
-    	writeln('> 3. Tabungan mandiri');
-    	{ Validasi masukan jenis rekening }
-    	{ Pengulangan akan berhenti jika pengguna memasukkan jenis rekening
-    	  yang tepat, yaitu 1, 2, atau 3 }
-    	stop:=false;
-    	repeat
-    		write('> Jenis rekening : ');
-    		readln(jenisRek);
-    		if (jenisRek=1) or (jenisRek=2) or (jenisRek=3) then
-    			stop:=true
-    		else
-    			writeln('> Jenis rekening yang Anda masukkan salah!');
-    	until stop;
-  end;
-  
-  procedure IsiTempArray(var tempArray : TabString; var jenis : string; var N : integer; jenisRek : integer);
-  begin
-		if (jenisRek=1) then
-    	begin
-    		jenis:='deposito';
-    		N:=0;
-    		for i:=1 to arrrekonline.Neff do
-    		begin
-    			if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-    			begin
-    				N:=N+1;
-    				tempArray[N]:=arrrekonline.list[i].noakun;
-    			end;
-    		end;
-    	end else if (jenisRek=2) then
-    	begin
-    		jenis:='tabungan rencana';
-    		N:=0;
-    		for i:=1 to arrrekonline.Neff do
-    		begin
-    			if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-    			begin
-    				N:=N+1;
-    				tempArray[N]:=arrrekonline.list[i].noakun;
-    			end;
-    		end;
-    	end else
-    	begin
-    		jenis:='tabungan mandiri';
-    		N:=0;
-    		for i:=1 to arrrekonline.Neff do
-    		begin
-    			if (arrrekonline.list[i].nonasabah=currentuser.nonasabah) and (arrrekonline.list[i].jenis=jenis) then
-    			begin
-    				N:=N+1;
-    				tempArray[N]:=arrrekonline.list[i].noakun;
-    			end;
-    		end;
-    	end;
-    end;
-  
-  procedure TampilIsiTempArray(tempArray : TabString; N : integer);
-  begin
-		writeln('> Pilih rekening ',jenis,' Anda:');
-    	for i:=1 to N do
-    	begin
-    		writeln('> ',i,'. ',tempArray[i]);
-    	end;
-  end;
 		
   procedure setoran();
 
@@ -206,31 +122,13 @@ implementation
     	IsiTempArray(tempArray,jenis,N,jenisRek);
     	if (N>0) then
     	begin
-			TampilIsiTempArray(tempArray,N);
+			TampilIsiTempArray(tempArray,N,jenis);
 			write('> Rekening: ');
 			readln(noAk);
-			{ Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
-			found1:=false;
-			i:=1;
-			while (i<=N) and (not(found1)) do
-			begin
-				if (tempArray[i]=noAk) then
-					found1:=true
-				else
-					i:=i+1;
-			end;
-    		if found1 then
+			CariIdxpadaTempArray(tempArray,noAk,N,found);
+    		if found then
     		begin
-				{ Pencarian indeks nomor akun rekening pada arrrekonline }
-				found2:=false;
-				j:=1;
-				while not(found2) do
-				begin
-					if (arrrekonline.list[j].noakun=noAk) then
-						found2:=true
-					else
-						j:=j+1;
-				end;
+				CariIdxpadaArrRekOnline(arrrekonline,noAk,j);
     			write('> Jumlah setoran: ');
     			readln(jumlahSetor);
     			{ Update besar saldo }
@@ -257,31 +155,13 @@ implementation
     	IsiTempArray(tempArray,jenis,N,jenisRek);
     	if (N>0) then
     	begin
-    		TampilIsiTempArray(tempArray,N);
+    		TampilIsiTempArray(tempArray,N,jenis);
     		write('> Rekening: ');
 			readln(noAk);
-			{ Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
-			found1:=false;
-			i:=1;
-			while (i<=N) and (not(found1)) do
-			begin
-				if (tempArray[i]=noAk) then
-					found1:=true
-				else
-					i:=i+1;
-			end;
-    		if found1 then
+			CariIdxpadaTempArray(tempArray,noAk,N,found);
+    		if found then
     		begin
-				{ Pencarian indeks nomor akun rekening pada arrrekonline }
-				found2:=false;
-				j:=1;
-				while not(found2) do
-				begin
-					if (arrrekonline.list[j].noakun=noAk) then
-						found2:=true
-					else
-						j:=j+1;
-				end;
+				CariIdxpadaArrRekOnline(arrrekonline,noAk,j);
     			write('> Masukkan jumlah uang yang diinginkan : ');
     			readln(jumlahTarik);
     			if (jenis='tabungan mandiri') and (arrrekonline.list[j].saldo>=jumlahTarik) then
@@ -319,31 +199,13 @@ implementation
       IsiTempArray(tempArray,jenis,N,jenisRek);
       if (N>0) then
       begin
-        TampilIsiTempArray(tempArray,N);
+        TampilIsiTempArray(tempArray,N,jenis);
         write('> Rekening : ');
         readln(noAk);
-        { Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
-		found1:=false;
-		i:=1;
-		while (i<=N) and (not(found1)) do
-		begin
-			if (tempArray[i]=noAk) then
-				found1:=true
-			else
-				i:=i+1;
-		end;
-        if found1 then
+        CariIdxpadaTempArray(tempArray,noAk,N,found);
+        if found then
         begin
-          { Pencarian indeks nomor akun rekening pada arrrekonline }
-		  found2:=false;
-		  i:=1;
-		  while not(found2) do
-		  begin
-				if (arrrekonline.list[i].noakun=noAk) then
-					found2:=true
-				else
-					i:=i+1;
-		  end;
+		  CariIdxpadaArrRekOnline(arrrekonline,noAk,i);
           write('> Masukkan rekening tujuan : ');readln(notujuan);
           repeat
             write('> Apakah rekening tersebut merupakan rekening bank XYZ? (y/n) : ');readln(pil);
@@ -450,31 +312,13 @@ implementation
     IsiTempArray(tempArray,jenis,N,jenisRek);
     if (N>0) then
     begin
-      TampilIsiTempArray(tempArray,N);
+      TampilIsiTempArray(tempArray,N,jenis);
       write('> Rekening: ');
       readln(noAk);
-      { Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
-	  found1:=false;
-	  i:=1;
-	  while (i<=N) and (not(found1)) do
+      CariIdxpadaTempArray(tempArray,noAk,N,found);
+	  if found then
 	  begin
-		 if (tempArray[i]=noAk) then
-			  found1:=true
-		 else
-			  i:=i+1;
-	  end;
-	  if found1 then
-	  begin
-		  { Pencarian indeks nomor akun rekening pada arrrekonline }
-		  found2:=false;
-		  i:=1;
-		  while not(found2) do
-		  begin
-				if (arrrekonline.list[i].noakun=noAk) then
-					found2:=true
-				else
-					i:=i+1;
-		  end;
+		  CariIdxpadaArrRekOnline(arrrekonline,noAk,i);
           if (arrrekonline.list[i].uang <> 'IDR') then
           begin
 			  ganti := CurrencyConvert(arrrekonline.list[i].uang,arrrekonline.list[i].saldo,'IDR');
