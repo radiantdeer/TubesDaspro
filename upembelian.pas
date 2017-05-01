@@ -1,6 +1,6 @@
 program pembelian;
 {Program untuk melakukan transaksi pembelian}
-uses sysutils,banktype,dateutils;
+uses sysutils,banktype,dateutils,utransaksi;
 
 {Kamus Global}
 var
@@ -10,91 +10,16 @@ var
 	arrrekonline 	: lrekonline;	//type rekening online
 	listkurs 		: lkurs;		//type kurs yang dipakai
 	currentuser 	: nasabah;		//data nasabah
-
-{Deklarasi dan Spesifikasi Fungsi}
-function SudahJatuhTempo (rekonline : rekonline;jenis : string) : boolean;
-{ Menghasilkan true jika telah memenuhi waktu jatuh tempo dan false jika
-  belum memenuhi waktu jatuh tempo }
-{ Waktu jatuh tempo dihitung dari tanggal pembuatan rekening ke jangka 
-  waktu yang ditentukan untuk rekening tersebut }
-
-{ Kamus Lokal }
+	T : lkurs;
+Function ConvertUang (awal, akhir : String ; Jumlah : real ) : real;
 var
-	tanggalMulai, jatuhTempo 	: TDateTime;
-	cmd 						: integer;
-	date, month, year 			: string;
-	dd, mm, yy 					: integer;
-	
-{ Algoritma }
-begin
-	date:=copy(rekonline.tglmulai,1,2);		//Menyalin tanggal dari array rekonline
-	month:=copy(rekonline.tglmulai,4,2);	//Menyalin bulan dari array rekonline
-	year:=copy(rekonline.tglmulai,7,4);		//Menyalin tahun dari array rekonline
-	val(date,dd);							//Mengubah bentuk tanggal dari string to integer
-	val(month,mm);							//Mengubah bentuk bulan dari string to integer
-	val(year,yy);							//Mengubah bentuk tahun dari string to integer
-	tanggalMulai:=EncodeDate(yy,mm,dd);		//Mengubah bentuk yy mm dd menjadi type tanggal
-	if (jenis = 'deposito') then
-	begin
-		case rekonline.waktu of				//case waktu deposito dan mengincrement bulan sebesar waktunya
-			'1 bulan' : jatuhTempo:=IncMonth(tanggalMulai,1);
-			'3 bulan' : jatuhTempo:=IncMonth(tanggalMulai,3);
-			'6 bulan' : jatuhTempo:=IncMonth(tanggalMulai,6);
-			'1 tahun' : jatuhTempo:=IncMonth(tanggalMulai,12);
-		end;
-	end else
-	if (jenis = 'tabungan rencana') then	//case waktu tabungan rencana dan mengincrement tahun sebesar waktunya
-	begin
-		case rekonline.waktu of
-			'1 tahun' : jatuhTempo:=IncYear(tanggalMulai,1);	
-			'2 tahun' : jatuhTempo:=IncYear(tanggalMulai,2);
-			'3 tahun' : jatuhTempo:=IncYear(tanggalMulai,3);
-			'4 tahun' : jatuhTempo:=IncYear(tanggalMulai,4);
-			'5 tahun' : jatuhTempo:=IncYear(tanggalMulai,5);	
-			'6 tahun' : jatuhTempo:=IncYear(tanggalMulai,6);
-			'7 tahun' : jatuhTempo:=IncYear(tanggalMulai,7);
-			'8 tahun' : jatuhTempo:=IncYear(tanggalMulai,8);
-			'9 tahun' : jatuhTempo:=IncYear(tanggalMulai,9);	
-			'10 tahun' : jatuhTempo:=IncYear(tanggalMulai,10);
-			'11 tahun' : jatuhTempo:=IncYear(tanggalMulai,11);
-			'12 tahun' : jatuhTempo:=IncYear(tanggalMulai,12);
-			'13 tahun' : jatuhTempo:=IncYear(tanggalMulai,13);
-			'14 tahun' : jatuhTempo:=IncYear(tanggalMulai,14);	
-			'15 tahun' : jatuhTempo:=IncYear(tanggalMulai,15);
-			'16 tahun' : jatuhTempo:=IncYear(tanggalMulai,16);
-			'17 tahun' : jatuhTempo:=IncYear(tanggalMulai,17);
-			'18 tahun' : jatuhTempo:=IncYear(tanggalMulai,18);	
-			'19 tahun' : jatuhTempo:=IncYear(tanggalMulai,19);
-			'20 tahun' : jatuhTempo:=IncYear(tanggalMulai,20);
-		end;
-	end;
-	cmd:=CompareDate(jatuhTempo,Now);					//membandingkan tanggal setelah di increment dengan waktu sekarang
-	SudahJatuhTempo:=cmd<=0;							
-end;
-
-function gantikurs (awal : string; akhir : string;saldo : real) : real;
-{Mengganti kurs dari kurs awal ke kurs akhir dengan skala yang telah ditentukan}
-
-{Kamus Lokal}
-var
-	found 	: boolean;
-	temp 	: real;
-	i 		: integer;
-	
-{Algoritma Fungsi}
-begin
-	found := false;
-	i := 0;
-	while not(found) do				//Pencarian tabel kurs yang tepat
-	begin	
-		i := i +1;
-		if (akhir = listkurs.list[i].awal) and (akhir = listkurs.list[i].akhir) then
-		begin
-			found := true;
-			temp := saldo * listkurs.list[i].nakhir / listkurs.list[i].nawal;
-		end;
-	end;
-	gantikurs := temp;
+	i : Integer;
+Begin
+	i:=0;
+	Repeat 
+		i:= i+1
+	until (arrrekonline.list[i].awal = awal) and (arrrekonline.list[i].akhir = akhir);
+		ConvertUang := Jumlah*(arrrekonline.list[i].nakhir) div (arrrekonline.list[i].nawal);
 end;
 
 procedure beli(harga : real;arr : integer;nomor : string);
@@ -198,14 +123,14 @@ begin
 		
 		if (arrrekonline.list[i].uang <> 'IDR') then
 		begin
-			ganti := gantikurs(arrrekonline.list[i].uang,'IDR',arrrekonline.list[i].saldo);
+			ganti := ConvertUang('IDR',arrrekonline.list[i].uang,harga);
 			if (jenis='tabungan mandiri') and (arrrekonline.list[i].saldo>=ganti) then
 			begin
-				arrrekonline.list[i].saldo:=gantikurs('IDR',arrrekonline.list[i].uang,(arrrekonline.list[i].saldo-ganti));
+				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-ganti
 				success:=true;
-			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i],jenis)) then 
+			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=ganti) and (SudahJatuhTempo(arrrekonline.list[i]) then 
 			begin
-				arrrekonline.list[i].saldo:=gantikurs('IDR',arrrekonline.list[i].uang,(arrrekonline.list[i].saldo-ganti));
+				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-ganti
 				success:=true;
 			end else
 				success:=false;
@@ -215,7 +140,7 @@ begin
 			begin
 				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 				success:=true;
-			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i],jenis)) then 
+			end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i]) then 
 			begin
 				arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 				success:=true;
