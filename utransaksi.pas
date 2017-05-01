@@ -84,28 +84,6 @@ implementation
       end;
       waktu := StrToInt(swaktu);
       jatuhTempo := IncYear(tanggalMulai,waktu);
-      { case rekonline.waktu of
-        '1 tahun' : jatuhTempo:=IncYear(tanggalMulai,1);  
-        '2 tahun' : jatuhTempo:=IncYear(tanggalMulai,2);
-        '3 tahun' : jatuhTempo:=IncYear(tanggalMulai,3);
-        '4 tahun' : jatuhTempo:=IncYear(tanggalMulai,4);
-        '5 tahun' : jatuhTempo:=IncYear(tanggalMulai,5);  
-        '6 tahun' : jatuhTempo:=IncYear(tanggalMulai,6);
-        '7 tahun' : jatuhTempo:=IncYear(tanggalMulai,7);
-        '8 tahun' : jatuhTempo:=IncYear(tanggalMulai,8);
-        '9 tahun' : jatuhTempo:=IncYear(tanggalMulai,9);  
-        '10 tahun' : jatuhTempo:=IncYear(tanggalMulai,10);
-        '11 tahun' : jatuhTempo:=IncYear(tanggalMulai,11);
-        '12 tahun' : jatuhTempo:=IncYear(tanggalMulai,12);
-        '13 tahun' : jatuhTempo:=IncYear(tanggalMulai,13);
-        '14 tahun' : jatuhTempo:=IncYear(tanggalMulai,14);  
-        '15 tahun' : jatuhTempo:=IncYear(tanggalMulai,15);
-        '16 tahun' : jatuhTempo:=IncYear(tanggalMulai,16);
-        '17 tahun' : jatuhTempo:=IncYear(tanggalMulai,17);
-        '18 tahun' : jatuhTempo:=IncYear(tanggalMulai,18);  
-        '19 tahun' : jatuhTempo:=IncYear(tanggalMulai,19);
-        '20 tahun' : jatuhTempo:=IncYear(tanggalMulai,20);
-      end; }
     end;
     cmd := CompareDate(jatuhTempo,Now);
     SudahJatuhTempo := cmd<=0;
