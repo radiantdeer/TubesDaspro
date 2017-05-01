@@ -49,10 +49,12 @@ implementation
 		hitungrekonline:integer;
 	begin
 		hitungrekonline:=0;
-		for i:=1 to arrnasabah.Neff do
+		writeln('testing nulis nonasabah user',currentuser.nonasabah); {testing tai}
+		for i:=1 to arrrekonline.Neff do
 		begin
-			if((currentuser.nonasabah)=(arrrekonline.list[i].nonasabah)) then
+			if(currentuser.nonasabah=arrrekonline.list[i].nonasabah) then
 			begin
+			writeln('nonasbah di rekonline',arrrekonline.list[i].nonasabah);{testing tai}
 				hitungrekonline:=hitungrekonline+1;
 				writeln('Informasi Rekening Online ',hitungrekonline,' anda :');
 					writeln(arrrekonline.list[i].noakun);
@@ -94,21 +96,28 @@ implementation
 	procedure isrekada (jenistab:string);
 	var
 		found:boolean;
+		a:integer;
 	begin
-		found:=false;
-		for i:=1 to (arrrekonline.Neff) do
+		for a:=1 to (arrnasabah.Neff) do
 		begin
-			if((arrrekonline.list[i].jenis)=jenistab) then
+		if(arrnasabah.list[a].nonasabah = currentuser.nonasabah) then
+		begin
+			found:=false;
+			for i:=1 to (arrrekonline.Neff) do
 			begin
-				found:=true;
-				writeln('Pilih rekening ',jenistab,' Anda: ');
-				writeln(arrrekonline.list[i].noakun);
-				writeln('Rekening ',jenistab,' :');
+				if((arrrekonline.list[i].jenis)=jenistab) then
+				begin
+					found:=true;
+					writeln('Pilih rekening ',jenistab,' Anda: ');
+					writeln(arrrekonline.list[i].noakun);
+					writeln('Rekening ',jenistab,' :');
+				end;
+			end;
+			if(found=false) then
+			begin
+				writeln('Anda tidak mempunyai ',jenistab);
 			end;
 		end;
-		if(found=false) then
-		begin
-			writeln('Anda tidak mempunyai ',jenistab);
 		end;
 	end;
 	procedure infosaldo();

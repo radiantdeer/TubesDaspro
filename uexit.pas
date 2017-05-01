@@ -3,7 +3,7 @@ unit uexit;
 
 interface
 
-  uses banktype, sysutils;
+  uses banktype, sysutils, ulogin;
 
   var
     ft : text;
@@ -28,8 +28,8 @@ interface
 implementation
 
 procedure exit();
-
   begin
+    if (NOT(currentuser.nonasabah = '')) then arrnasabah.list[isUserExists(currentuser.user,arrnasabah)] := currentuser; // Jika telah ada user yang login, data currentuser akan dipindahkan ke array utama
     if(loadedFile[1] <> '') then // Jika ada, maka akan menyimpan data file nasabah
     begin
       writeln('Menyimpan data ke file ',loadedFile[1]);

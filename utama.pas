@@ -1,7 +1,7 @@
 Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
-uses uload, ulogin, ulihatrek, utransaksi, uexit, banktype, sysutils, crt;
+uses uload, ulogin, ulihatrek, utransaksi, uadminnasabah, uexit, banktype, sysutils, crt;
 // u<str> : Unit yang memuat fungsi-fungsi yang berkaitan dengan <str> bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
@@ -9,7 +9,7 @@ uses uload, ulogin, ulihatrek, utransaksi, uexit, banktype, sysutils, crt;
 function isCmdExecutable() : boolean;
 { Mengecek apakah :
   * File/Data rekening online ada (data array tidak kosong)
-  * Ada user yang sudah login
+  * Ada user yang sudah login. Bila user sudah login, sudah dipastikan bahwa data nasabah ada
   Jika kedua kondisi diatas dipenuhi, fungsi mengembalikan true }
 begin
   isCmdExecutable := NOT(((loadedFile[2] = '') OR (arrrekonline.Neff = 0)) OR (currentuser.nonasabah = ''));
@@ -19,7 +19,7 @@ end;
 begin
   // Inisialisasi berbagai variabel pendukung telah dilakukan di unit banktype
   writeln('Selamat datang di sistem bank XYZ!');
-  writeln('Tanggal dan waktu sekarang adalah ',FormatDateTime('DD-MM-YYYY',Now)); // Menampilkan tanggal sekarang
+  writeln('Tanggal sekarang adalah ',FormatDateTime('DD-MM-YYYY',Now)); // Menampilkan tanggal sekarang
   repeat
     write('XYZ > ');readln(cmd); // Menanyakan perintah
     if (not(cmd = 'exit')) then
@@ -72,9 +72,13 @@ begin
                           writeln('Data pendukung tidak memadai atau user belum login!');
                       end;
         'tutuprekening' : writeln('tutuprekening launched!');
-        'editnasabah' : writeln('editnasabah launched!');
+        'editnasabah' : begin
+                          if(NOT(currentuser.nonasabah = '')) then
+                            editnasabah()
+                          else
+                            writeln('Data pendukung tidak memadai atau user belum login!');
+                        end;
         'tambahautodebet' : writeln('tambahautodebet launched!');
-        'man' : writeln('man launched!'); // Gak ada di spek, nanti kalo udah kelar semua baru bikin manual (gampang sih ini sebenarnya...)
         'clear' : clrscr(); // Untuk membersihkan tampilan
         else writeln('Error : Perintah ',cmd,' tidak terdefinisi!');
       end;
