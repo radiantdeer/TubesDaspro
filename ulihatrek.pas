@@ -57,15 +57,15 @@ implementation
 			writeln('nonasabah di rekonline',arrrekonline.list[i].nonasabah);{testing tai}
 				hitungrekonline:=hitungrekonline+1;
 				writeln('Informasi Rekening Online ',hitungrekonline,' anda :');
-					writeln(arrrekonline.list[i].noakun);
-					writeln(arrrekonline.list[i].nonasabah);
-					writeln(arrrekonline.list[i].jenis);
-					writeln(arrrekonline.list[i].uang);
-					writeln(arrrekonline.list[i].saldo:0:2);
-					writeln(arrrekonline.list[i].setrutin:0:2);
-					writeln(arrrekonline.list[i].autodebet);
-					writeln(arrrekonline.list[i].waktu);
-					writeln(arrrekonline.list[i].tglmulai);
+					writeln('Nomor Akun : ',arrrekonline.list[i].noakun);
+					writeln('Nomor Nasabah : ',arrrekonline.list[i].nonasabah);
+					writeln('Jenis Tabungan Anda : ',arrrekonline.list[i].jenis);
+					writeln('Kurs Mata uang yang Digunakan : ',arrrekonline.list[i].uang);
+					writeln('Saldo Rekening ',arrrekonline.list[i].jenis,' Anda : ',arrrekonline.list[i].saldo:0:2);
+					writeln('Setoran Rutin Anda : ',arrrekonline.list[i].setrutin:0:2);
+					writeln('Auto Debet Rekening Anda : ',arrrekonline.list[i].autodebet);
+					writeln('Waktu Aktif Rekening nda : ',arrrekonline.list[i].waktu);
+					writeln('Waktu Memulai Rekening Anda : ',arrrekonline.list[i].tglmulai);
 					writeln;
 			end;
 		end;
