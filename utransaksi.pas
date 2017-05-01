@@ -326,7 +326,7 @@ implementation
               begin
 					arrrekonline.list[i].saldo:=CurrencyConvert('IDR',(arrrekonline.list[i].saldo-ganti),arrrekonline.list[i].uang);
 					success:=true;
-			  end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
+			  end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (CurrencyConvert(arrrekonline.list[i].uang,arrrekonline.list[i].saldo,'IDR')>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
 			  begin
 					arrrekonline.list[i].saldo:=CurrencyConvert('IDR',(arrrekonline.list[i].saldo-ganti), arrrekonline.list[i].uang);
 					success:=true;
@@ -336,7 +336,7 @@ implementation
           begin
 			  arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 			  success:=true;
-          end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (arrrekonline.list[i].saldo>=harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
+          end else if ((jenis='deposito') or (jenis='tabungan rencana')) and (CurrencyConvert(arrrekonline.list[i].uang,arrrekonline.list[i].saldo,'IDR')>= harga) and (SudahJatuhTempo(arrrekonline.list[i])) then 
           begin
 			  arrrekonline.list[i].saldo:=arrrekonline.list[i].saldo-harga;
 			  success:=true;
