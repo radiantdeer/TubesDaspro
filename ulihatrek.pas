@@ -59,12 +59,12 @@ implementation
 		hitungrekonline:integer;
 	begin
 		hitungrekonline:=0;
-		writeln('testing nulis nonasabah user',currentuser.nonasabah); {testing tai}
+		writeln('testing nulis nonasabah user',currentuser.nonasabah);
 		for i:=1 to arrrekonline.Neff do
 		begin
 			if(currentuser.nonasabah=arrrekonline.list[i].nonasabah) then
 			begin
-			writeln('nonasabah di rekonline',arrrekonline.list[i].nonasabah);{testing tai}
+			writeln('nonasabah di rekonline',arrrekonline.list[i].nonasabah);
 				hitungrekonline:=hitungrekonline+1;
 				writeln('Informasi Rekening Online ',hitungrekonline,' anda :');
 					writeln('Nomor Akun : ',arrrekonline.list[i].noakun);
