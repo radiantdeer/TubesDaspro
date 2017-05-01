@@ -96,20 +96,22 @@ implementation
 	procedure isrekada (jenistab:string);
 	var
 		found:boolean;
-		a:integer;
+		a,hitung:integer;
 	begin
 		for a:=1 to (arrnasabah.Neff) do
 		begin
 			if(currentuser.nonasabah=arrnasabah.list[a].nonasabah) then
 			begin
 				found:=false;
+				hitung:=0;
 				for i:=1 to (arrrekonline.Neff) do
 				begin
 					if((arrrekonline.list[i].jenis)=jenistab) then
 					begin
 						found:=true;
+						hitung:=hitung+1;
 						writeln('Pilih rekening ',jenistab,' Anda: ');
-						writeln(arrrekonline.list[i].noakun);
+						writeln(hitung,'. 'arrrekonline.list[i].noakun);
 						writeln('Rekening ',jenistab,' :');
 					end;
 				end;
