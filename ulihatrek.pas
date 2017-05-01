@@ -54,7 +54,7 @@ implementation
 		begin
 			if(currentuser.nonasabah=arrrekonline.list[i].nonasabah) then
 			begin
-			writeln('nonasbah di rekonline',arrrekonline.list[i].nonasabah);{testing tai}
+			writeln('nonasabah di rekonline',arrrekonline.list[i].nonasabah);{testing tai}
 				hitungrekonline:=hitungrekonline+1;
 				writeln('Informasi Rekening Online ',hitungrekonline,' anda :');
 					writeln(arrrekonline.list[i].noakun);
@@ -100,24 +100,24 @@ implementation
 	begin
 		for a:=1 to (arrnasabah.Neff) do
 		begin
-		if(arrnasabah.list[a].nonasabah = currentuser.nonasabah) then
-		begin
-			found:=false;
-			for i:=1 to (arrrekonline.Neff) do
+			if(currentuser.nonasabah=arrnasabah.list[a].nonasabah) then
 			begin
-				if((arrrekonline.list[i].jenis)=jenistab) then
+				found:=false;
+				for i:=1 to (arrrekonline.Neff) do
 				begin
-					found:=true;
-					writeln('Pilih rekening ',jenistab,' Anda: ');
-					writeln(arrrekonline.list[i].noakun);
-					writeln('Rekening ',jenistab,' :');
+					if((arrrekonline.list[i].jenis)=jenistab) then
+					begin
+						found:=true;
+						writeln('Pilih rekening ',jenistab,' Anda: ');
+						writeln(arrrekonline.list[i].noakun);
+						writeln('Rekening ',jenistab,' :');
+					end;
+				end;
+				if(found=false) then
+				begin
+					writeln('Anda tidak mempunyai ',jenistab);
 				end;
 			end;
-			if(found=false) then
-			begin
-				writeln('Anda tidak mempunyai ',jenistab);
-			end;
-		end;
 		end;
 	end;
 	procedure infosaldo();
