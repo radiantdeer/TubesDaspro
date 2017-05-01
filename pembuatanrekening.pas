@@ -197,7 +197,7 @@ begin
 		while (i<= arrrekonline.neff) and not(found) do
 		begin
 			i := i +1;
-			if (arrrekonline.list[i].noakun = autodebet) then
+			if (arrrekonline.list[i].noakun = autodebet) and (arrrekonline.list[i].jenis = 'tabungan mandiri') then
 			begin
 				found := true;
 			end;
