@@ -1,7 +1,7 @@
 Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
-uses uload, ulogin, ubukatutuprekening, ulihatrek, utransaksi, uadminnasabah, utampilanpengguna, uexit, banktype, sysutils, crt;
+uses uload, ulogin, ututup, ulihatrek, utransaksi, uadminnasabah, utampilanpengguna, uexit, banktype, sysutils, crt;
 // u<str> : Unit yang memuat fungsi-fungsi yang berkaitan dengan <str> bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
@@ -71,25 +71,35 @@ begin
                         writeln('Data pendukung tidak memadai atau user belum login!');
                      end;
         'pembayaran' : begin
-			if(isCmdExecutable() ) then
-			 bayarya()
-			else
-			 writeln('Data pendukung tidak memadai atau user belum login!');
-			end;
+						if(isCmdExecutable() ) then
+							bayarya()
+						else
+							writeln('Data pendukung tidak memadai atau user belum login!');
+						end;
         'pembelian' : begin
                         if (isCmdExecutable() and not(loadedFile[7] = '') and not(loadedFile[8] = '')) then
                           menu_pembelian()
                         else
                           writeln('Data pendukung tidak memadai atau user belum login!');
                       end;
-        'tutuprekening' : writeln('tutuprekening launched!');
-        'editnasabah' : begin
+        'tutuprekening' : begin
+							if (isCmdExecutable()) then
+							tutuprek();
+							else
+							writeln('Data pendukung tidak memadai atau user belum login!');
+						end;
+		'editnasabah' : begin
                           if(NOT(currentuser.nonasabah = '')) then
                             editnasabah()
                           else
                             writeln('Data pendukung tidak memadai atau user belum login!');
                         end;
-        'tambahautodebet' : writeln('tambahautodebet launched!');
+        'tambahautodebet' : begin
+                          if(NOT(currentuser.nonasabah = '')) then
+                            gantiautodebet()
+                          else
+                            writeln('Data pendukung tidak memadai atau user belum login!');
+                        end;
         'clear' : clrscr(); // Untuk membersihkan tampilan
         else writeln('Error : Perintah ',cmd,' tidak terdefinisi!');
       end;
