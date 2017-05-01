@@ -1,7 +1,8 @@
-program tutuprekening;
-{Program yang digunakan untuk menutup sebuah rekening}
+unit ututup;
+{unit yang digunakan untuk menutup sebuah rekening}
 uses banktype, sysutils, dateutils,utransaksi;
-
+interface
+uses uadminnasabah,banktype,sysutils;
 {Kamus Global}
 var
 	biaya : real;
