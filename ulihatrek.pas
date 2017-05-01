@@ -140,7 +140,7 @@ implementation
 				writeln('> Mata Uang: ',arrrekonline.list[j].uang);
 				writeln('> Jangka Waktu: ',arrrekonline.list[j].waktu);
 				writeln('> Setoran Rutin: ',arrrekonline.list[j].setrutin);
-				writeln('> Saldo: ',arrrekonline.list[j].saldo);
+				writeln('> Saldo: ',arrrekonline.list[j].saldo:0:2);
 			end else { not(found1) }
 				writeln('> Rekening tidak ditemukan!');
 		end else { N=0 }
