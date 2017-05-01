@@ -2,7 +2,7 @@ unit ututup;
 {unit yang digunakan untuk menutup sebuah rekening}
 uses banktype, sysutils, dateutils,utransaksi;
 interface
-uses uadminnasabah,banktype,sysutils;
+	uses uadminnasabah,banktype,sysutils;
 {Kamus Global}
 var
 	biaya : real;
@@ -15,12 +15,19 @@ var
 	jumlah : real;
 	noAk : string;
 	jenis : string;
-
+	{fungsi dan prosedur}
 function Kuranghari (rekonline : rekonline;jenis : string) : integer;
 { Menghasilkan true jika telah memenuhi waktu jatuh tempo dan false jika
   belum memenuhi waktu jatuh tempo }
 { Waktu jatuh tempo dihitung dari tanggal pembuatan rekening ke jangka 
   waktu yang ditentukan untuk rekening tersebut }
+procedure tutuprek ();
+//IS:
+//FS:
+
+implementation
+function Kuranghari (rekonline : rekonline;jenis : string) : integer;
+
 
 { Kamus Lokal }
 var
@@ -77,6 +84,7 @@ begin
 end;
 
 {Algoritma}
+procedure tutuprek ();
 begin
 	writeln('> Pilih jenis rekening');
 	writeln('> 1. Deposito');
@@ -348,5 +356,6 @@ begin
 			writeln('> Saldo anda kurang atau rekening anda belum jatuh tempo. Penutupan dibatalkan');
 	end else
 		writeln('> Anda tidak mempunyai ',jenis,'.');
+end;
 end.
 		
