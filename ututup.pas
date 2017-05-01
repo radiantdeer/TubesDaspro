@@ -1,8 +1,7 @@
 unit ututup;
 {unit yang digunakan untuk menutup sebuah rekening}
-uses banktype, sysutils, dateutils,utransaksi;
 interface
-	uses uadminnasabah,banktype,sysutils;
+	uses banktype, sysutils, dateutils, utransaksi, uadminnasabah;
 {Kamus Global}
 var
 	biaya : real;
