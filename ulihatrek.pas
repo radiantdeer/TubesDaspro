@@ -3,8 +3,15 @@
 unit ulihatrek;
 
 interface
-	uses banktype,sysutils;
+	uses banktype,sysutils, utampilanpengguna;
+	type
+		TabString = array [1..50] of string;
 	var
+		tempArray : TabString;
+		jenisRek : integer;
+		jenis : string;
+		N, j : integer;
+		found1, found2 : boolean;
 		i,Neff,pilrek:integer;
 		noak,noakun:string;
 	procedure lihatdatarek ();
@@ -14,10 +21,13 @@ interface
 		//IS: harus sudah validasi login di tempat lain dulu sebelum panggil fungsi ini
 		//FS: output indeks dmn orang dgn noakun xxx berada di arrrekonline
 		//    klo found = true maka indeks=i , klo found = false maka indeks=0
-	procedure isrekada (jenistab:string);
+	procedure infosaldo();
+		//IS: Sudah login
+		//FS: Menampilkan info saldo currentuser sesuai pilihan
+//	procedure isrekada (jenistab:string);
 		// IS: login ada output bernilai i
 		// FS: menampilkan pilihan noakun pada sebuah jenis tabungan
-	procedure infosaldo();
+//	procedure infosaldo();
 		//IS : sudah login
 		//FS: menampilkan info saldo currentuser ssuai pilihan
 	function today (Fmt : string):string;
@@ -93,68 +103,112 @@ implementation
 			carirekonline:=0;
 		end;
 	end;
-	procedure isrekada (jenistab:string);
-	var
-		found:boolean;
-		a,hitung:integer;
-	begin
-		for a:=1 to (arrnasabah.Neff) do
-		begin
-			if(currentuser.nonasabah=arrnasabah.list[a].nonasabah) then
-			begin
-				found:=false;
-				hitung:=0;
-				for i:=1 to (arrrekonline.Neff) do
-				begin
-					if((arrrekonline.list[i].jenis)=jenistab) then
-					begin
-						found:=true;
-						hitung:=hitung+1;
-						writeln('Pilih rekening ',jenistab,' Anda: ');
-						writeln(hitung,'. 'arrrekonline.list[i].noakun);
-						writeln('Rekening ',jenistab,' :');
-					end;
-				end;
-				if(found=false) then
-				begin
-					writeln('Anda tidak mempunyai ',jenistab);
-				end;
-			end;
-		end;
-	end;
+	
 	procedure infosaldo();
-	var
-		inaktif:integer;
 	begin
-		writeln('Pilih jenis rekening:');
-		writeln('1. Deposito');
-		writeln('2. Tabungan Rencana');
-		writeln('3. Tabungan Mandiri');
-		write('Jenis rekening: ');
-		readln(pilrek);
-			if(pilrek=1) then
+		PilihJenisRekening(jenisRek);
+		IsiTempArray(tempArray,jenis,N,jenisRek);
+		if (N>0) then
+		begin
+			TampilIsiTempArray(tempArray,N,jenis);
+			write('> Rekening: ');
+			readln(noAk);
+			{ Pencarian indeks nomor akun rekening yang dimasukkan pengguna pada tempArray }
+			found1:=false;
+			i:=1;
+			while (i<=N) and (not(found1)) do
 			begin
-				isrekada('deposito');
-			end else if(pilrek=2) then
-			begin
-				isrekada('tabungan rencana');
-			end else if(pilrek=3) then
-			begin
-				isrekada('tabungan mandiri');
+				if (tempArray[i]=noAk) then
+					found1:=true
+				else
+					i:=i+1;
 			end;
-		readln(noakun);
-		noak:=noakun;//testing bwt lihattransaksi
-		inaktif:=carirekonline(noakun);
-		writeln;
-		writeln('Informasi Rekening Online Anda');
-		writeln('Nomor rekening : ',noakun);
-		writeln('Tanggal Mulai : ',arrrekonline.list[inaktif].tglmulai);
-		writeln('Mata Uang : ',arrrekonline.list[inaktif].uang);
-		writeln('Jangka Waktu : ',arrrekonline.list[inaktif].waktu);
-		writeln('Setoran Rutin : ',arrrekonline.list[inaktif].setrutin:0:2);
-		writeln('Saldo : ',arrrekonline.list[inaktif].saldo:0:2);
-		writeln();
+			if found1 then
+			begin
+				{ Pencarian indeks nomor akun rekening pada arrrekonline }
+				found2:=false;
+				j:=1;
+				while not(found2) do
+				begin
+					if (arrrekonline.list[j].noakun=noAk) then
+						found2:=true
+					else
+						j:=j+1;
+				end;
+				writeln('> Nomor Rekening: ',arrrekonline.list[j].noakun);
+				writeln('> Tanggal Mulai: ',arrrekonline.list[j].tglmulai);
+				writeln('> Mata Uang: ',arrrekonline.list[j].uang);
+				writeln('> Jangka Waktu: ',arrrekonline.list[j].waktu);
+				writeln('> Setoran Rutin: ',arrrekonline.list[j].setrutin);
+				writeln('> Saldo: ',arrrekonline.list[j].saldo);
+			end else { not(found1) }
+				writeln('> Rekening tidak ditemukan!');
+		end else { N=0 }
+			writeln('> Anda tidak mempunyai ',jenis,'.');
 	end;
+	
+//	procedure isrekada (jenistab:string);
+//	var
+//		found:boolean;
+//		a,hitung:integer;
+//	begin
+//		for a:=1 to (arrnasabah.Neff) do
+//		begin
+//			if(currentuser.nonasabah=arrnasabah.list[a].nonasabah) then
+//			begin
+//				found:=false;
+//				hitung:=0;
+//				for i:=1 to (arrrekonline.Neff) do
+//				begin
+//					if((arrrekonline.list[i].jenis)=jenistab) then
+//					begin
+//						found:=true;
+//						hitung:=hitung+1;
+//						writeln('Pilih rekening ',jenistab,' Anda: ');
+//						writeln(hitung,'. 'arrrekonline.list[i].noakun);
+//						writeln('Rekening ',jenistab,' :');
+//					end;
+//				end;
+//				if(found=false) then
+//				begin
+//					writeln('Anda tidak mempunyai ',jenistab);
+//				end;
+//			end;
+//		end;
+//	end;
+//	procedure infosaldo();
+//	var
+//		inaktif:integer;
+//	begin
+//		writeln('Pilih jenis rekening:');
+//		writeln('1. Deposito');
+//		writeln('2. Tabungan Rencana');
+//		writeln('3. Tabungan Mandiri');
+//		write('Jenis rekening: ');
+//		readln(pilrek);
+//			if(pilrek=1) then
+//			begin
+//				isrekada('deposito');
+//			end else if(pilrek=2) then
+//			begin
+//				isrekada('tabungan rencana');
+//			end else if(pilrek=3) then
+//			begin
+//				isrekada('tabungan mandiri');
+//			end;
+//		readln(noakun);
+//		noak:=noakun;//testing bwt lihattransaksi
+//		inaktif:=carirekonline(noakun);
+//		writeln;
+//		writeln('Informasi Rekening Online Anda');
+//		writeln('Nomor rekening : ',noakun);
+//		writeln('Tanggal Mulai : ',arrrekonline.list[inaktif].tglmulai);
+//		writeln('Mata Uang : ',arrrekonline.list[inaktif].uang);
+//		writeln('Jangka Waktu : ',arrrekonline.list[inaktif].waktu);
+//		writeln('Setoran Rutin : ',arrrekonline.list[inaktif].setrutin:0:2);
+//		writeln('Saldo : ',arrrekonline.list[inaktif].saldo:0:2);
+//		writeln();
+//	end;
 
 	function today (Fmt : string):string;
 
