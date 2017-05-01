@@ -2,7 +2,7 @@ unit utransaksi;
 { Berisi fungsi-fungsi transaksi (setoran, penarikan, transfer, pembelian, pembayaran) }
 
 interface
-  uses banktype, utampilanpengguna, sysutils, dateutils;
+  uses banktype, utampilanpengguna, sysutils, dateutils,ulihatrek;
   
   type
 	  TabString = array [1..50] of string;
@@ -44,7 +44,9 @@ interface
   procedure menu_pembelian();
   { Menampilkan menu pembelian, yaitu list produk/jasa yang tersedia dan menangani pilihan user.
     Jika pilihan user benar, maka proses pembelian akan ditangani prosedur pembelian_do }
-
+  procedure bayarya ();
+  {input rekening mana yg mau dipake bwt bayar, pilih pembayaran, masukin nominal pembayaran, lalu saldo rekening
+  akan berkurang sesuai bayartotal}
 implementation
 
   function SudahJatuhTempo (rekonline : rekonline) : boolean;
@@ -390,4 +392,104 @@ implementation
     pembelian_do(arrbarang.list[pilih].harga,pilih,nomor);
   end;
 
+ procedure bayarya ();
+	var
+		noAk,pil,nobayar:string;
+		i,jt:integer;{jt=jenis transaksi}
+		harini,s1:string;
+		ang,sel:integer;
+		bayartotal,jumbayar:real;{jumbayar yg ori, bayartotal yg abis ada denda dan kurs}
+		denda,tukar,found:boolean; {denda true=klo >tgl15, tukar=true klo di rekonline bkn IDR dan di pembayaran pake IDR}
+	begin
+		writeln('Masukkan Nomor Akun yang akan anda gunakan untuk membayar');
+		readln(noAk);
+		found:=false;
+		i:=1;
+		while (i<=arrrekonline.Neff) and (not(found)) do
+		begin
+			if (arrrekonline.list[i].noakun=noAk) then
+				found:=true
+			else
+				i:=i+1;
+		end;//cek 
+		if(found=true) then
+		begin
+		if (SudahJatuhTempo(arrrekonline.list[i])=true) then
+		begin {klo udh jatuh tempo baru bisa melakukan pembayaran}
+					writeln ('Pilih Jenis Pembayaran');
+					writeln('1. Listrik');{ada batas tgl 15}
+					writeln('2. BPJS');
+					writeln('3. PDAM');{ada batas tgl 15}
+					writeln('4. Telepon');{ada batas tgl 15}
+					writeln('5. TV Kabel');{ada batas tgl 15}
+					writeln('6. Kartu Kredit');
+					writeln('7. Pajak');
+					writeln('8. Pendidikan');
+					writeln('9. Internet');{ada batas tgl 15}
+					writeln('10. Transaksi Lain');
+					write ('Jenis Transaksi Pembayaran : ');
+					readln(jt);
+					case jt of
+						1 : pil :='Listrik';
+						2 : pil := 'BPJS';
+						3 : pil := 'PDAM';
+						4 : pil := 'Telepon';
+						5 : pil := 'TV Kabel';
+						6 : pil := 'Kartu Kredit';
+						7 : pil := 'Pajak';
+						8 : pil := 'Pendidikan'
+						else begin
+							Write ('Jenis Transaksi : ');
+							readln(pil);
+						end;
+					end;
+					write('Nomor Pembayaran : ');
+					readln(nobayar);
+					harini:=FormatDateTime('DD-MM-YYYY',Now);//now bwt nentuin udh lewat tgl 15 ato blum
+					s1:=gettgl(harini);//dapet tgl brp
+					val(s1,ang);//ang jadi variabel integer hasil konversi dari s1
+					sel:=ang-15;//selisih hari stlh lewat tgl 15
+					if((jt=1) or(jt=3) or(jt=4) or(jt=5) or(jt=9)) and (ang>15) then //ada kriteria yg lebih tgl 15 kena denda
+					begin{pengecekan kena denda ato ga}
+						denda:=true;
+					end else begin
+						denda:=false;
+					end;
+					writeln('Masukkan Jumlah yang ingin dibayar');
+					readln(jumbayar);
+					{bagian ini cuma bwt cari kurs di rekonline}
+						if((arrrekonline.list[i].uang)<>'IDR') then
+						begin
+							tukar:=true; //hrs dikonversi klo bkn IDR
+						end else begin
+							tukar:=false; //ga perlu dikonversi klo IDR
+						end;
+					{cari kurs selese}
+					if(denda=true) and(tukar=true) then
+					begin{kena denda dan beda kurs}
+						bayartotal:= CurrencyConvert('IDR',(jumbayar + 10000*sel),(arrrekonline.list[i].uang));
+					end else if(denda=true) and (tukar=false) then
+					begin{kena denda tapi kurs sama}
+						bayartotal:= jumbayar + 10000*sel;
+					end else if(denda=false) and (tukar=true) then
+					begin{ga kena denda dan beda kurs}
+						bayartotal:= CurrencyConvert('IDR',jumbayar,(arrrekonline.list[i].uang));
+					end else begin {ga kena denda dan kurs sama}
+						bayartotal:=jumbayar;
+					end;
+					arrbayar.Neff:=arrbayar.Neff + 1;
+					{nulis di arrbayar yg baru}
+					arrbayar.list[arrbayar.Neff].noakun:= arrrekonline.list[i].noakun;
+					arrbayar.list[arrbayar.Neff].jenis:= pil;
+					arrbayar.list[arrbayar.Neff].nomorbayar:= nobayar;
+					arrbayar.list[arrbayar.Neff].uang:= 'IDR';
+					arrbayar.list[arrbayar.Neff].jumlah:= jumbayar;
+					arrbayar.list[arrbayar.Neff].saldoakhir:= (arrrekonline.list[i].saldo)-bayartotal; 
+					arrbayar.list[arrbayar.Neff].tgl:= FormatDateTime('DD-MM-YYYY',Now);
+					writeln('Transaksi Pembayaran Anda Telah Sukses! Sisa Saldo Anda Sekarang ',arrbayar.list[arrbayar.Neff].saldoakhir:0:2);
+		end else begin
+			Writeln('Waktu Batas Pengambilan Belum Lewat, Transaksi Gagal');
+		end;
+		end;
+	end;
 end.
