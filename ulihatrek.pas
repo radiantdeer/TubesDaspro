@@ -51,7 +51,7 @@ implementation
 		hitungrekonline:=0;
 		for i:=1 to arrnasabah.Neff do
 		begin
-			if((currentuser.nonasabah)=(arrrekonline.list[i].nonasabah)) then
+			if(currentuser.nonasabah=arrrekonline.list[i].nonasabah) then
 			begin
 				hitungrekonline:=hitungrekonline+1;
 				writeln('Informasi Rekening Online ',hitungrekonline,' anda :');
