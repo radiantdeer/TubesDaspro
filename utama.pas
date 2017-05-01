@@ -84,7 +84,7 @@ begin
                       end;
         'tutuprekening' : begin
 							if (isCmdExecutable()) then
-							tutuprek();
+							tutuprek()
 							else
 							writeln('Data pendukung tidak memadai atau user belum login!');
 						end;
