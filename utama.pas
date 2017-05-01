@@ -70,7 +70,12 @@ begin
                       else 
                         writeln('Data pendukung tidak memadai atau user belum login!');
                      end;
-        'pembayaran' : writeln('pembayaran launched!');
+        'pembayaran' : begin
+			if() and not() then
+			 bayarya()
+			else
+			 writeln('Data pendukung tidak memadai atau user belum login!');
+			end;
         'pembelian' : begin
                         if (isCmdExecutable() and not(loadedFile[7] = '') and not(loadedFile[8] = '')) then
                           menu_pembelian()
