@@ -49,10 +49,12 @@ implementation
 		hitungrekonline:integer;
 	begin
 		hitungrekonline:=0;
-		for i:=1 to arrnasabah.Neff do
+		writeln('testing nulis nonasabah user',currentuser.nonasabah); {testing tai}
+		for i:=1 to arrrekonline.Neff do
 		begin
 			if(currentuser.nonasabah=arrrekonline.list[i].nonasabah) then
 			begin
+			writeln('nonasbah di rekonline',arrrekonline.list[i].nonasabah);{testing tai}
 				hitungrekonline:=hitungrekonline+1;
 				writeln('Informasi Rekening Online ',hitungrekonline,' anda :');
 					writeln(arrrekonline.list[i].noakun);
