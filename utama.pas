@@ -1,7 +1,7 @@
 Program InterfaceXYZ;
 // Program utama yang menangani berbagai masukan dari user
 
-uses uload, ulogin, ulihatrek, utransaksi, uadminnasabah, utampilanpengguna, uexit, banktype, sysutils, crt;
+uses uload, ulogin, ubukatutuprekening, ulihatrek, utransaksi, uadminnasabah, utampilanpengguna, uexit, banktype, sysutils, crt;
 // u<str> : Unit yang memuat fungsi-fungsi yang berkaitan dengan <str> bank
 // sysutils : Agar bisa memakai fungsi waktu yang disediakan Pascal
 // crt : Untuk clrscr
@@ -45,7 +45,13 @@ begin
                             else
                               writeln('Data rekening kosong atau user belum login!');
                            end;
-        'bukarekening' : writeln('bukarekening launched');
+        'bukarekening' : begin
+							if (isCmdExecutable()) then
+								BukaRekening()
+							else
+								writeln('Data rekening kosong atau user belum login!');
+						 end;
+								
         'setor' : begin
                     if (isCmdExecutable()) then
                       setoran()
