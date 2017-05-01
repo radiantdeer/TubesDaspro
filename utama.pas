@@ -19,7 +19,7 @@ end;
 begin
   // Inisialisasi berbagai variabel pendukung telah dilakukan di unit banktype
   writeln('Selamat datang di sistem bank XYZ!');
-  writeln('Tanggal dan waktu sekarang adalah ',FormatDateTime('DD-MM-YYYY',Now)); // Menampilkan tanggal sekarang
+  writeln('Tanggal sekarang adalah ',FormatDateTime('DD-MM-YYYY',Now)); // Menampilkan tanggal sekarang
   repeat
     write('XYZ > ');readln(cmd); // Menanyakan perintah
     if (not(cmd = 'exit')) then
@@ -79,7 +79,6 @@ begin
                             writeln('Data pendukung tidak memadai atau user belum login!');
                         end;
         'tambahautodebet' : writeln('tambahautodebet launched!');
-        'man' : writeln('man launched!'); // Gak ada di spek, nanti kalo udah kelar semua baru bikin manual (gampang sih ini sebenarnya...)
         'clear' : clrscr(); // Untuk membersihkan tampilan
         else writeln('Error : Perintah ',cmd,' tidak terdefinisi!');
       end;
