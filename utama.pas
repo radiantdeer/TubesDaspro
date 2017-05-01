@@ -71,7 +71,7 @@ begin
                         writeln('Data pendukung tidak memadai atau user belum login!');
                      end;
         'pembayaran' : begin
-			if() and not() then
+			if(isCmdExecutable() ) then
 			 bayarya()
 			else
 			 writeln('Data pendukung tidak memadai atau user belum login!');
